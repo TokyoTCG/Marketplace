@@ -1,0 +1,27 @@
+'use client'
+import CardSearch from './components/CardSearch'
+
+export default function Home() {
+  return (
+    <main className="max-w-xl mx-auto mt-20 p-4">
+      <h1 className="text-2xl font-bold mb-4">Search Pokémon 
+Cards</h1>
+      <CardSearch onSelect={(card) => console.log(card)} />
+    </main>
+  )
+import Link 
+from 
+'next/link'
+
+export default function Home() {
+  return (
+    <main style={{maxWidth: '800px', margin: '0 auto', padding: '4rem 2rem', textAlign: 'center'}}>
+      <h1 style={{fontSize: '3rem', fontWeight: 'bold', marginBottom: '1rem'}}>🎴 TokyoTCG</h1>
+      <p style={{fontSize: '1.25rem', color: '#6b7280', marginBottom: '2rem'}}>The Dutch marketplace for Japanese Pokémon cards</p>
+      <div style={{display: 'flex', gap: '1rem', justifyContent: 'center'}}>
+        <a href="/listings" style={{backgroundColor: '#1d4ed8', color: 'white', padding: '0.75rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1rem'}}>Browse Cards</a>
+        <a href="/sell-choose" style={{backgroundColor: 'white', color: '#1d4ed8', padding: '0.75rem 2rem', borderRadius: '8px', textDecoration: 'none', fontWeight: 'bold', fontSize: '1rem', border: '2px solid #1d4ed8'}}>Sell a Card</a>
+      </div>
+    </main>
+  )
+}
