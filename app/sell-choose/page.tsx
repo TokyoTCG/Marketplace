@@ -43,13 +43,13 @@ export default function SellChoose() {
           <div className="choose-grid">
             <a href="/listings/new" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
               <img src="/kpgz1z1jbhrmy0cwk4etask7nw_preview_0-ezremove.png" alt="Raw card" className="card-hover"
-                style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '12px', cursor: 'pointer' }}
+                style={{ width: 'clamp(150px, 40vw, 240px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '12px', cursor: 'pointer' }}
               />
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>RAW</span>
             </a>
             <a href="/listings/new-psa" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
               <img src="/card-psa.webp" alt="PSA graded card" className="card-hover"
-                style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '8px', cursor: 'pointer' }}
+                style={{ width: 'clamp(150px, 40vw, 240px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '8px', cursor: 'pointer' }}
               />
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>PSA</span>
             </a>

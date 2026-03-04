@@ -50,7 +50,7 @@ export default function Choose() {
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>RAW</span>
             </a>
             <a href="/graded" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <img src="/card-psa.webp" alt="PSA graded card" className="card-hover"
+              <img src="/card-psa.jpg" alt="PSA graded card" className="card-hover"
                 style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'contain', objectPosition: 'center', borderRadius: '8px', cursor: 'pointer' }}
               />
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>PSA</span>
