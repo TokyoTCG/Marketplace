@@ -1,21 +1,21 @@
-import { getToken } from 'next-auth/jwt'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req })
-  const { pathname } = req.nextUrl
+export function middleware(request: NextRequest) {
+  const bypass = request.cookies.get('tcg_bypass')?.value
+  const { pathname } = request.nextUrl
 
-  const protectedPaths = ['/listings/new', '/listings/new-psa']
+  if (pathname === '/coming-soon' || pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/logo') || pathname.includes('.')) {
+    return NextResponse.next()
+  }
 
-  if (protectedPaths.includes(pathname) && !token) {
-    const loginUrl = new URL('/login', req.url)
-    loginUrl.searchParams.set('callbackUrl', pathname)
-    return NextResponse.redirect(loginUrl)
+  if (bypass !== 'true') {
+    return NextResponse.redirect(new URL('/coming-soon', request.url))
   }
 
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/listings/new', '/listings/new-psa'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }

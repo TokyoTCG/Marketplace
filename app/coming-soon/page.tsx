@@ -1,9 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 const BYPASS_PASSWORD = 'tokyotcg2025';
-const BYPASS_KEY = 'tcg_bypass';
 
 interface Star {
   x: number;
@@ -18,12 +16,8 @@ export default function ComingSoon() {
   const [showInput, setShowInput] = useState(false);
   const [error, setError] = useState('');
   const [stars, setStars] = useState<Star[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem(BYPASS_KEY) === 'true') {
-      router.replace('/');
-    }
     const s: Star[] = Array.from({ length: 80 }, () => ({
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -36,8 +30,8 @@ export default function ComingSoon() {
 
   const handleUnlock = () => {
     if (input === BYPASS_PASSWORD) {
-      localStorage.setItem(BYPASS_KEY, 'true');
-      router.replace('/');
+      document.cookie = 'tcg_bypass=true; path=/; max-age=31536000';
+      window.location.href = '/';
     } else {
       setError('Ongeldig wachtwoord');
       setInput('');
@@ -66,12 +60,12 @@ export default function ComingSoon() {
           De grootste Japanse Pokemon marktplaats van Nederland is bijna klaar.
         </p>
         {!showInput ? (
-          <button onClick={() => setShowInput(true)} style={{ background: 'none', border: 'none', color: '#333', fontSize: '11px', cursor: 'pointer', letterSpacing: '2px', fontFamily: "'Segoe UI', sans-serif", padding: '8px' }}>
+          <button onClick={() => setShowInput(true)} style={{ background: 'none', border: 'none', color: '#333', fontSize: '11px', cursor: 'pointer', letterSpacing: '2px', padding: '8px' }}>
             ✦
           </button>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-            <input autoFocus type="password" value={input} onChange={e => { setInput(e.target.value); setError(''); }} onKeyDown={e => e.key === 'Enter' && handleUnlock()} placeholder="Wachtwoord" style={{ backgroundColor: '#1f1f21', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '12px 20px', color: '#ffffff', fontSize: '14px', outline: 'none', width: '100%', maxWidth: '280px', textAlign: 'center', fontFamily: "'Segoe UI', sans-serif", boxSizing: 'border-box' }} />
+            <input autoFocus type="password" value={input} onChange={e => { setInput(e.target.value); setError(''); }} onKeyDown={e => e.key === 'Enter' && handleUnlock()} placeholder="Wachtwoord" style={{ backgroundColor: '#1f1f21', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '12px 20px', color: '#ffffff', fontSize: '14px', outline: 'none', width: '100%', maxWidth: '280px', textAlign: 'center', boxSizing: 'border-box' }} />
             {error && <p style={{ color: '#ff6b6b', fontSize: '12px', margin: 0 }}>{error}</p>}
             <button onClick={handleUnlock} style={{ backgroundColor: '#a67abf', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px 32px', fontSize: '12px', fontWeight: '700', letterSpacing: '2px', cursor: 'pointer' }}>
               ENTER
@@ -79,7 +73,7 @@ export default function ComingSoon() {
           </div>
         )}
       </div>
-      <div style={{ position: 'absolute', bottom: '24px', fontSize: '11px', color: '#444', letterSpacing: '1px', fontFamily: "'Segoe UI', sans-serif", zIndex: 1 }}>
+      <div style={{ position: 'absolute', bottom: '24px', fontSize: '11px', color: '#444', letterSpacing: '1px', zIndex: 1 }}>
         2025 TokyoTCG - tokyotcg.nl
       </div>
       <style>{`@keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.3); } }`}</style>
