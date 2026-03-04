@@ -44,7 +44,7 @@ export default function Choose() {
           <p style={{ color: '#aaaaaa', fontSize: '15px', marginBottom: '48px' }}>Kies een categorie om te beginnen</p>
           <div className="choose-grid">
             <a href="/browse" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <img src="/card-raw.png" alt="Raw card" className="card-hover"
+              <img src="/card-greedent.jpg" alt="Raw card" className="card-hover"
                 style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'cover', objectPosition: 'center top', borderRadius: '12px', cursor: 'pointer' }}
               />
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>RAW</span>
