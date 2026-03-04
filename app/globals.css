@@ -29,3 +29,6 @@ body {
 @media (max-width: 768px) {
   .browse-sidebar { display: none !important; }
 }
+
+html { background-color: #0a0a0c; }
+body { background-color: #1a1a1c; min-height: 100vh; }

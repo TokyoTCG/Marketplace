@@ -39,7 +39,7 @@ export default function ComingSoon() {
   };
 
   return (
-    <div style={{ backgroundColor: '#0a0a0c', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: "'Courier New', monospace", overflow: 'hidden', position: 'relative', padding: '24px' }}>
+    <div style={{ backgroundColor: '#0a0a0c', minHeight: '100vh', minHeight: '-webkit-fill-available', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: "'Courier New', monospace", overflow: 'hidden', position: 'relative', padding: '24px' }}>
       <style>{`
         @keyframes twinkle { 0%, 100% { opacity: 0; } 50% { opacity: 0.6; } }
       `}</style>
@@ -57,7 +57,7 @@ export default function ComingSoon() {
       <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', maxWidth: '500px', width: '100%' }}>
 
         <div style={{ fontSize: '10px', letterSpacing: '4px', color: '#a67abf', marginBottom: '20px', opacity: 0.7 }}>
-          // DÉ JAPANSE POKEMON MARKTPLAATS VAN NL
+          // DÉ JAPANSE POKÉMON MARKTPLAATS VAN NL
         </div>
 
         <h1 style={{ fontSize: 'clamp(52px, 13vw, 110px)', fontWeight: '700', color: '#ffffff', margin: '0 0 6px', lineHeight: 1, letterSpacing: '-2px' }}>
