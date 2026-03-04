@@ -5,18 +5,26 @@ import { useRouter } from 'next/navigation';
 const BYPASS_PASSWORD = 'tokyotcg2025';
 const BYPASS_KEY = 'tcg_bypass';
 
+interface Star {
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+  dur: number;
+}
+
 export default function ComingSoon() {
   const [input, setInput] = useState('');
   const [showInput, setShowInput] = useState(false);
   const [error, setError] = useState('');
-  const [stars, setStars] = useState([]);
+  const [stars, setStars] = useState<Star[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem(BYPASS_KEY) === 'true') {
       router.replace('/');
     }
-    const s = Array.from({ length: 80 }, () => ({
+    const s: Star[] = Array.from({ length: 80 }, () => ({
       x: Math.random() * 100,
       y: Math.random() * 100,
       size: Math.random() * 2 + 1,
