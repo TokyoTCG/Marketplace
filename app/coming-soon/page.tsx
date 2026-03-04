@@ -39,7 +39,7 @@ export default function ComingSoon() {
   };
 
   return (
-    <div style={{ backgroundColor: '#0a0a0c', minHeight: '100vh', minHeight: '-webkit-fill-available', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: "'Courier New', monospace", overflow: 'hidden', position: 'relative', padding: '24px' }}>
+    <div style={{ backgroundColor: '#0a0a0c', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: "'Courier New', monospace", overflow: 'hidden', position: 'relative', padding: '24px' }}>
       <style>{`
         @keyframes twinkle { 0%, 100% { opacity: 0; } 50% { opacity: 0.6; } }
       `}</style>
