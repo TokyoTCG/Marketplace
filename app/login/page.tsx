@@ -84,7 +84,7 @@ export default function LoginPage() {
       const res = await fetch('/api/auth/verify-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, code }),
+        body: JSON.stringify({ email, code: String(code).trim() }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Ongeldige code')
