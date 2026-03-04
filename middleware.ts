@@ -5,7 +5,12 @@ export function middleware(request: NextRequest) {
   const bypass = request.cookies.get('tcg_bypass')?.value
   const { pathname } = request.nextUrl
 
-  if (pathname === '/coming-soon' || pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/logo') || pathname.includes('.')) {
+  if (
+    pathname.startsWith('/coming-soon') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
+    pathname.includes('.')
+  ) {
     return NextResponse.next()
   }
 
