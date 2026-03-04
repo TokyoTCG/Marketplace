@@ -1,8 +1,13 @@
 'use client'
 import SiteHeader from '@/components/SiteHeader'
 import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function SellChoose() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
   useEffect(() => {
     const container = document.getElementById('twinkle-container')
     if (!container) return
@@ -21,6 +26,15 @@ export default function SellChoose() {
       container.appendChild(dot)
     }
   }, [])
+
+  const handleSell = (destination: string) => {
+    if (status === 'loading') return
+    if (!session) {
+      router.push('/login?callbackUrl=' + encodeURIComponent(destination))
+    } else {
+      router.push(destination)
+    }
+  }
 
   return (
     <div style={{ backgroundColor: '#1a1a1c', minHeight: '100vh', color: '#ffffff', fontFamily: "'Segoe UI', system-ui, sans-serif", position: 'relative' }}>
@@ -41,18 +55,18 @@ export default function SellChoose() {
           <h1 style={{ fontSize: 'clamp(24px, 6vw, 32px)', fontWeight: '800', marginBottom: '8px' }}>Wat wil je verkopen?</h1>
           <p style={{ color: '#aaaaaa', fontSize: '15px', marginBottom: '48px' }}>Kies een categorie om te beginnen</p>
           <div className="choose-grid">
-            <a href="/listings/new" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <img src="/kpgz1z1jbhrmy0cwk4etask7nw_preview_0-ezremove.png" alt="Raw card" className="card-hover"
-                style={{ width: 'clamp(150px, 40vw, 240px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '12px', cursor: 'pointer' }}
+            <div onClick={() => handleSell('/listings/new')} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
+              <img src="/card-greedent.jpg" alt="Raw card" className="card-hover"
+                style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '12px' }}
               />
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>RAW</span>
-            </a>
-            <a href="/listings/new-psa" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            </div>
+            <div onClick={() => handleSell('/listings/new-psa')} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
               <img src="/card-psa.webp" alt="PSA graded card" className="card-hover"
-                style={{ width: 'clamp(150px, 40vw, 240px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '8px', cursor: 'pointer' }}
+                style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '8px' }}
               />
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>PSA</span>
-            </a>
+            </div>
           </div>
         </div>
       </div>
