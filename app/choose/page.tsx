@@ -36,7 +36,7 @@ export default function Choose() {
       <div id="twinkle-container" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }} />
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ backgroundColor: '#a67abf', padding: '7px', textAlign: 'center', fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>
-          DE JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
+          DÉ JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
         </div>
         <SiteHeader activePage="kopen" />
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
