@@ -155,7 +155,10 @@ export default function Welcome() {
         { top: '80%', left: '55%', size: '14px', color: '#c9a0f5', delay: '0.5s', dur: '1.9s' },
         { top: '25%', right: '38%',size: '10px', color: '#e0c8ff', delay: '0.8s', dur: '2.3s' },
       ].map((s, i) => (
-        <div key={i} className="star" style={{ top: s.top, left: s.left, right: s.right, bottom: s.bottom, '--size': s.size, '--color': s.color, '--delay': s.delay, '--dur': s.dur } as React.CSSProperties}>✦</div>
+        <div key={i} className="star" style={{ top: s.top, left: s.left, 
+right: s.right, bottom: (s as any).bottom, '--size': s.size, '--color': 
+s.color, 
+'--delay': s.delay, '--dur': s.dur } as React.CSSProperties}>✦</div>
       ))}
 
       {/* Clefairy glow */}
