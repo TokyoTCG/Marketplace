@@ -2,7 +2,7 @@
 import { cardData } from '@/lib/cardData';
 import SiteHeader from '@/components/SiteHeader';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function getCardNumber(number: string): string {
   const match = number.match(/(\d+\/\d+)/);
@@ -51,6 +51,14 @@ const SET_COLORS: Record<string, string> = {
 
 export default function Browse() {
   const [search, setSearch] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const allCards = cardData.filter(card =>
     card.name.toLowerCase().includes(search.toLowerCase())
@@ -71,37 +79,37 @@ export default function Browse() {
       </div>
       <SiteHeader />
 
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '16px', display: 'flex', gap: '28px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: isMobile ? '12px' : '16px', display: 'flex', gap: '28px' }}>
 
-        {/* SIDEBAR - hidden on mobile via CSS */}
-        <aside className="browse-sidebar" style={{ width: '180px', flexShrink: 0 }}>
-          <div style={{ position: 'sticky', top: '20px', backgroundColor: '#1f1f21', borderRadius: '8px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
-            <div style={{ padding: '12px 14px', borderBottom: '1px solid #2e2e31', fontSize: '11px', fontWeight: '700', letterSpacing: '1px', color: '#aaaaaa' }}>
-              SERIES
+        {!isMobile && (
+          <aside style={{ width: '180px', flexShrink: 0 }}>
+            <div style={{ position: 'sticky', top: '20px', backgroundColor: '#1f1f21', borderRadius: '8px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
+              <div style={{ padding: '12px 14px', borderBottom: '1px solid #2e2e31', fontSize: '11px', fontWeight: '700', letterSpacing: '1px', color: '#aaaaaa' }}>
+                SERIES
+              </div>
+              <div style={{ padding: '6px' }}>
+                {sets.map(set => (
+                  
+                    key={set}
+                    href={'#' + set.replace(/[^a-z0-9]/gi, '-').toLowerCase()}
+                    style={{ display: 'block', padding: '6px 8px', borderRadius: '4px', color: '#aaaaaa', textDecoration: 'none', fontSize: '12px' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#aaaaaa')}
+                  >
+                    {set}
+                  </a>
+                ))}
+              </div>
             </div>
-            <div style={{ padding: '6px' }}>
-              {sets.map(set => (
-                
-                  key={set}
-                  href={'#' + set.replace(/[^a-z0-9]/gi, '-').toLowerCase()}
-                  style={{ display: 'block', padding: '6px 8px', borderRadius: '4px', color: '#aaaaaa', textDecoration: 'none', fontSize: '12px' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#aaaaaa')}
-                >
-                  {set}
-                </a>
-              ))}
-            </div>
-          </div>
-        </aside>
+          </aside>
+        )}
 
-        {/* MAIN */}
         <main style={{ flex: 1, minWidth: 0 }}>
           <input
             placeholder="Zoek een Pokemon..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            style={{ width: '100%', maxWidth: '400px', backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '10px 16px', color: '#ffffff', fontSize: '14px', outline: 'none', marginBottom: '32px', boxSizing: 'border-box' }}
+            style={{ width: '100%', maxWidth: isMobile ? '100%' : '400px', backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '10px 16px', color: '#ffffff', fontSize: '14px', outline: 'none', marginBottom: '24px', boxSizing: 'border-box' }}
           />
 
           {sets.filter(set => bySet[set]).map(set => (
@@ -109,7 +117,7 @@ export default function Browse() {
               <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', paddingBottom: '10px', borderBottom: '1px solid #2e2e31' }}>
                 {set}
               </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
                 {bySet[set].map(card => (
                   <Link key={card.slug} href={`/cards/${card.slug}`} style={{ textDecoration: 'none' }}>
                     <div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: 'pointer' }}>
