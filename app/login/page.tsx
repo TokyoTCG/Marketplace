@@ -281,7 +281,8 @@ export default function LoginPage() {
               Door verder te gaan ga je akkoord met onze{' '}
               <a href="/terms" style={{ color: '#a67abf', textDecoration: 'none' }}>Algemene voorwaarden</a>{' '}
               en{' '}
-              <a href="/privacy" style={{ color: '#a67abf', textDecording: 'none' }}>Privacybeleid</a>.
+              <a href="/privacy" style={{ color: '#a67abf', 
+textDecoration: 'none' }}>Privacybeleid</a>.
             </div>
           </div>
         </div>
