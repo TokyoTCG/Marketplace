@@ -57,7 +57,7 @@ export default function SellChoose() {
           <div className="choose-grid">
             <div onClick={() => handleSell('/listings/new')} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
               <img src="/card-greedent.jpg" alt="Raw card" className="card-hover"
-                style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'contain', borderRadius: '12px' }}
+                style={{ width: 'clamp(130px, 35vw, 210px)', aspectRatio: '2/3', objectFit: 'cover', borderRadius: '12px' }}
               />
               <span style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', letterSpacing: '2px' }}>RAW</span>
             </div>
