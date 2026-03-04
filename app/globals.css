@@ -26,3 +26,6 @@ body {
   .mobile-menu-btn { display: block !important; }
   .mobile-menu { display: flex !important; }
 }
+@media (max-width: 768px) {
+  .browse-sidebar { display: none !important; }
+}
