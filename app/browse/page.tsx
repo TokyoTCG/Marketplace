@@ -71,20 +71,17 @@ export default function Browse() {
       </div>
       <SiteHeader />
 
-<div style={{ maxWidth: '1400px', margin: '0 auto', padding: '16px', 
-display: 'flex', gap: '28px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '16px', display: 'flex', gap: '28px' }}>
 
-        {/* SIDEBAR */}
-<aside className="browse-sidebar" style={{ width: '180px', flexShrink: 0 
-}}>          
-<div style={{ position: 'sticky', top: '20px', backgroundColor: 
-'#1f1f21', borderRadius: '8px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
+        {/* SIDEBAR - hidden on mobile via CSS */}
+        <aside className="browse-sidebar" style={{ width: '180px', flexShrink: 0 }}>
+          <div style={{ position: 'sticky', top: '20px', backgroundColor: '#1f1f21', borderRadius: '8px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
             <div style={{ padding: '12px 14px', borderBottom: '1px solid #2e2e31', fontSize: '11px', fontWeight: '700', letterSpacing: '1px', color: '#aaaaaa' }}>
               SERIES
             </div>
             <div style={{ padding: '6px' }}>
               {sets.map(set => (
-                <a
+                
                   key={set}
                   href={'#' + set.replace(/[^a-z0-9]/gi, '-').toLowerCase()}
                   style={{ display: 'block', padding: '6px 8px', borderRadius: '4px', color: '#aaaaaa', textDecoration: 'none', fontSize: '12px' }}
@@ -112,9 +109,8 @@ display: 'flex', gap: '28px' }}>
               <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', paddingBottom: '10px', borderBottom: '1px solid #2e2e31' }}>
                 {set}
               </h2>
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, 
-minmax(130px, 1fr))', gap: '8px' }}>                {bySet[set].map(card 
-=> (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
+                {bySet[set].map(card => (
                   <Link key={card.slug} href={`/cards/${card.slug}`} style={{ textDecoration: 'none' }}>
                     <div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: 'pointer' }}>
                       <div style={{ padding: '6px' }}>
