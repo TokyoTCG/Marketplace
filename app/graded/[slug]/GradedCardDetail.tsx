@@ -22,7 +22,7 @@ const lastPrice  = priceData[priceData.length - 1].raw;
 const priceDiff  = ((lastPrice - firstPrice) / firstPrice * 100).toFixed(1);
 const priceUp    = lastPrice >= firstPrice;
 
-const conditionLabel: Record<string, string> = { M: 'Mint', NM: 'Near Mint', Excellent: 'Excellent', Good: 'Good', Played: 'Played' };
+const PSA_GRADES = ['PSA 10', 'PSA 9', 'PSA 8', 'PSA 7', 'PSA 6', 'PSA 5', 'PSA 4', 'PSA 3', 'PSA 2', 'PSA 1'];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -36,25 +36,24 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function CardDetail({ card }: { card: any }) {
-  const [activeCondition, setActiveCondition] = useState('All');
+export default function GradedCardDetail({ card }: { card: any }) {
+  const [activeGrade, setActiveGrade] = useState('All');
   const [hovered, setHovered] = useState<number | null>(null);
   const [listings, setListings] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/listings?cardSlug=' + card.slug)
+    fetch('/api/listings?cardSlug=' + card.slug + '&graded=true')
       .then(r => r.json())
       .then(d => setListings(d.listings || []))
+      .catch(() => setListings([]));
   }, [card.slug]);
 
-  const filtered = listings.filter(l => {
-    if (activeCondition === 'All') return true;
-    const map: Record<string,string> = { M: 'Mint', NM: 'NM', EX: 'Excellent', GD: 'Good', PL: 'Played' };
-    return l.condition === activeCondition || l.condition === map[activeCondition];
-  });
+  const filtered = activeGrade === 'All'
+    ? listings
+    : listings.filter(l => l.condition === activeGrade);
+
   const sorted = [...filtered].sort((a, b) => a.price - b.price);
   const lowestPrice = sorted.length > 0 ? Math.min(...sorted.map((l: any) => l.price)) : null;
-
   const numberOnly = card.number ? card.number.split(' ')[0] : '';
 
   return (
@@ -76,15 +75,16 @@ export default function CardDetail({ card }: { card: any }) {
       </header>
 
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '14px 32px', fontSize: 12, color: '#666', display: 'flex', gap: 6 }}>
-        <a href="/browse" style={{ color: '#aaa', textDecoration: 'none' }}>Browse</a>
+        <a href="/graded" style={{ color: '#aaa', textDecoration: 'none' }}>Graded</a>
         <span>›</span>
-        <a href={'/browse#' + card.set.toLowerCase().replace(/ /g, '-')} style={{ color: '#aaa', textDecoration: 'none' }}>{card.set}</a>
+        <a href={'/graded#' + card.set.toLowerCase().replace(/ /g, '-')} style={{ color: '#aaa', textDecoration: 'none' }}>{card.set}</a>
         <span>›</span>
         <span style={{ color: '#a67abf' }}>{card.name}</span>
       </div>
 
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 32px 64px', display: 'flex', gap: 28 }}>
 
+        {/* Left */}
         <div style={{ width: 240, flexShrink: 0 }}>
           <div style={{ borderRadius: 12, background: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', marginBottom: 10 }}>
             <div style={{ padding: 8 }}>
@@ -108,12 +108,13 @@ export default function CardDetail({ card }: { card: any }) {
           </div>
         </div>
 
+        {/* Right */}
         <div style={{ flex: 1, minWidth: 0 }}>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
             <div>
               <div style={{ fontSize: 11, color: '#a67abf', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
-                {card.set}
+                {card.set} · PSA Graded
               </div>
               <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 3px', letterSpacing: '-0.01em' }}>{card.name}</h1>
               <div style={{ fontSize: 12, color: '#555' }}>{card.nameJP} · {card.nameRoman}</div>
@@ -132,7 +133,7 @@ export default function CardDetail({ card }: { card: any }) {
           <div style={{ background: '#1f1f21', border: '1px solid #2e2e31', borderRadius: 12, padding: '16px 18px', marginBottom: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
               <div style={{ fontSize: 13, fontWeight: 700 }}>Prijsontwikkeling</div>
-              <div style={{ fontSize: 11, color: '#666' }}>Raw · NM · 12 maanden</div>
+              <div style={{ fontSize: 11, color: '#666' }}>PSA · 12 maanden</div>
             </div>
             <ResponsiveContainer width="100%" height={130}>
               <LineChart data={priceData} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
@@ -151,22 +152,23 @@ export default function CardDetail({ card }: { card: any }) {
                 Aanbiedingen <span style={{ color: '#666', fontWeight: 400, fontSize: 12 }}>({sorted.length})</span>
               </div>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {['All', 'M', 'NM', 'EX', 'GD', 'PL'].map(c => (
-                  <button key={c} onClick={() => setActiveCondition(c)} style={{
-                    background: activeCondition === c ? '#a67abf' : '#1f1f21',
+                {['All', ...PSA_GRADES].map(g => (
+                  <button key={g} onClick={() => setActiveGrade(g)} style={{
+                    background: activeGrade === g ? '#a67abf' : '#1f1f21',
                     border: '1px solid',
-                    borderColor: activeCondition === c ? '#a67abf' : '#2e2e31',
+                    borderColor: activeGrade === g ? '#a67abf' : '#2e2e31',
                     borderRadius: 6,
-                    color: activeCondition === c ? '#fff' : '#888',
+                    color: activeGrade === g ? '#fff' : '#888',
                     fontSize: 11, fontWeight: 600,
                     padding: '4px 10px', cursor: 'pointer',
-                  }}>{c}</button>
+                    whiteSpace: 'nowrap',
+                  }}>{g}</button>
                 ))}
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px 120px 120px', padding: '7px 12px', fontSize: 10, color: '#555', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', borderBottom: '1px solid #2e2e31' }}>
-              <span>Verkoper</span><span>Staat</span><span>Prijs</span><span></span>
+              <span>Verkoper</span><span>Grade</span><span>Prijs</span><span></span>
             </div>
 
             {sorted.length === 0 ? (
@@ -190,7 +192,7 @@ export default function CardDetail({ card }: { card: any }) {
                     </span>
                   </div>
                   <span style={{ fontSize: 11, fontWeight: 700, color: '#a67abf', background: '#a67abf18', border: '1px solid #a67abf40', borderRadius: 5, padding: '2px 10px', display: 'inline-block', whiteSpace: 'nowrap', width: 'fit-content' }}>
-                    {conditionLabel[l.condition] || l.condition}
+                    {l.condition}
                   </span>
                   <span style={{ fontSize: 15, fontWeight: 800 }}>€{l.price.toFixed(2)}</span>
                   <button style={{ background: '#a67abf', border: 'none', borderRadius: 8, color: '#fff', fontSize: 12, fontWeight: 700, padding: '7px 0', cursor: 'pointer', width: '100%' }}>

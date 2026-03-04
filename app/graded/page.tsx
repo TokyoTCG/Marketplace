@@ -49,7 +49,7 @@ const SET_COLORS: Record<string, string> = {
   'Crimson Haze': '#bf7a7a',
 };
 
-export default function Browse() {
+export default function GradedBrowse() {
   const [search, setSearch] = useState('');
 
   const allCards = cardData.filter(card =>
@@ -97,6 +97,10 @@ export default function Browse() {
 
         {/* MAIN */}
         <main style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ marginBottom: '24px' }}>
+            <div style={{ display: 'inline-block', background: '#a67abf', borderRadius: '6px', padding: '3px 10px', fontSize: '11px', fontWeight: '700', letterSpacing: '1px' }}>PSA GRADED</div>
+          </div>
+
           <input
             placeholder="Zoek een Pokemon..."
             value={search}
@@ -111,7 +115,7 @@ export default function Browse() {
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
                 {bySet[set].map(card => (
-                  <Link key={card.slug} href={`/cards/${card.slug}`} style={{ textDecoration: 'none' }}>
+                  <Link key={card.slug} href={`/graded/${card.slug}`} style={{ textDecoration: 'none' }}>
                     <div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: 'pointer' }}>
                       <div style={{ padding: '6px' }}>
                         <img src={card.image} alt={card.name} style={{ width: '100%', display: 'block', borderRadius: '8px' }} />
