@@ -70,7 +70,7 @@ export default function CardPhotoCapture({ onPhotosReady }: Props) {
       </div>
 
       <div style={{ fontSize: '10px', color: '#555', marginBottom: '10px' }}>
-        Geüploade foto's worden ter verificatie naar TokyoTCG gestuurd
+        Geüploade foto's worden ter verificatie naar Tokyo TCG gestuurd.
       </div>
 
       {uploadFront && uploadBack && (
