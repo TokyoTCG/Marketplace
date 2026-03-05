@@ -76,23 +76,36 @@ export async function POST(req: NextRequest) {
 
   // Send verification email if photos were uploaded (not camera)
   if (!fromCamera) {
+    const deleteUrl = `https://www.tokyotcg.nl/api/listings?id=${data.id}&secret=${process.env.ADMIN_SECRET}`
     await resend.emails.send({
-      from: 'noreply@tokyotcg.nl',
+      from: process.env.EMAIL_FROM!,
       to: 'info@tokyotcg.nl',
-      subject: `📸 Verificatie vereist: ${cardName} (${graded ? psaGrade : condition})`,
+      subject: `Nieuwe listing: ${cardName} (${graded ? psaGrade : condition}) — verificatie vereist`,
       html: `
-        <h2>Nieuwe listing ter verificatie</h2>
-        <p><strong>Kaart:</strong> ${cardName} — ${cardSet}</p>
-        <p><strong>Conditie:</strong> ${graded ? psaGrade : condition}</p>
-        <p><strong>Prijs:</strong> €${price}</p>
-        <p><strong>Verkoper:</strong> ${user.name || token.email}</p>
-        <p><strong>Foto's:</strong></p>
-        <p>Voorkant: <a href="${uploadedUrls[0]}">${uploadedUrls[0]}</a></p>
-        <img src="${uploadedUrls[0]}" style="max-width:300px;border-radius:8px;" />
-        <p>Achterkant: <a href="${uploadedUrls[1]}">${uploadedUrls[1]}</a></p>
-        <img src="${uploadedUrls[1]}" style="max-width:300px;border-radius:8px;" />
-        <br/>
-        <p>Listing ID: ${data.id}</p>
+        <div style="font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;background:#1a1a1c;color:#fff;padding:32px;border-radius:16px">
+          <h1 style="color:#a67abf;font-size:20px;margin:0 0 24px">TokyoTCG — Nieuwe listing</h1>
+          <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
+            <tr><td style="color:#888;padding:6px 0;font-size:13px">Kaart</td><td style="color:#fff;font-weight:700;font-size:13px">${cardName} — ${cardSet}</td></tr>
+            <tr><td style="color:#888;padding:6px 0;font-size:13px">Conditie</td><td style="color:#fff;font-weight:700;font-size:13px">${graded ? psaGrade : condition}</td></tr>
+            <tr><td style="color:#888;padding:6px 0;font-size:13px">Prijs</td><td style="color:#fff;font-weight:700;font-size:13px">€${price}</td></tr>
+            <tr><td style="color:#888;padding:6px 0;font-size:13px">Verkoper</td><td style="color:#fff;font-weight:700;font-size:13px">${user.name || token.email}</td></tr>
+            <tr><td style="color:#888;padding:6px 0;font-size:13px">Listing ID</td><td style="color:#555;font-size:12px">${data.id}</td></tr>
+          </table>
+          <div style="display:flex;gap:16px;margin-bottom:24px">
+            <div style="flex:1;text-align:center">
+              <p style="color:#888;font-size:11px;font-weight:700;letter-spacing:1px;margin:0 0 8px">VOORKANT</p>
+              <img src="${uploadedUrls[0]}" style="width:100%;max-width:240px;border-radius:10px;border:1px solid #2e2e31" />
+            </div>
+            <div style="flex:1;text-align:center">
+              <p style="color:#888;font-size:11px;font-weight:700;letter-spacing:1px;margin:0 0 8px">ACHTERKANT</p>
+              <img src="${uploadedUrls[1]}" style="width:100%;max-width:240px;border-radius:10px;border:1px solid #2e2e31" />
+            </div>
+          </div>
+          <a href="${deleteUrl}" style="display:block;background:#ef4444;color:#fff;text-decoration:none;text-align:center;padding:14px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:1px">
+            LISTING VERWIJDEREN
+          </a>
+          <p style="color:#555;font-size:11px;text-align:center;margin-top:12px">Klik alleen als de fotos incorrect of frauduleus zijn</p>
+        </div>
       `
     })
   }
@@ -113,4 +126,21 @@ export async function GET(req: NextRequest) {
   const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ listings: data })
+}
+
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = new URL(req.url)
+  const id = searchParams.get('id')
+  const secret = searchParams.get('secret')
+
+  if (secret !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const { error } = await supabase.from('listings').delete().eq('id', id)
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  return new Response('<html><body style="font-family:sans-serif;text-align:center;padding:60px;background:#1a1a1c;color:#fff"><h2 style="color:#4ade80">Listing verwijderd</h2><p style="color:#888">Je kunt dit venster sluiten.</p></body></html>', {
+    headers: { 'Content-Type': 'text/html' }
+  })
 }
