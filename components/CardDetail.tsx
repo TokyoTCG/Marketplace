@@ -2,26 +2,6 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const priceData = [
-  { date: 'Okt', raw: 4.50 },
-  { date: 'Nov', raw: 5.20 },
-  { date: 'Dec', raw: 6.80 },
-  { date: 'Jan', raw: 7.20 },
-  { date: 'Feb', raw: 6.90 },
-  { date: 'Mar', raw: 8.50 },
-  { date: 'Apr', raw: 9.10 },
-  { date: 'Mei', raw: 8.80 },
-  { date: 'Jun', raw: 10.20 },
-  { date: 'Jul', raw: 11.50 },
-  { date: 'Aug', raw: 10.90 },
-  { date: 'Sep', raw: 12.40 },
-];
-
-const firstPrice = priceData[0].raw;
-const lastPrice  = priceData[priceData.length - 1].raw;
-const priceDiff  = ((lastPrice - firstPrice) / firstPrice * 100).toFixed(1);
-const priceUp    = lastPrice >= firstPrice;
-
 const conditionLabel: Record<string, string> = { M: 'Mint', NM: 'Near Mint', Excellent: 'Excellent', Good: 'Good', Played: 'Played' };
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -36,11 +16,15 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+const MONTH_LABELS = ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
+
 export default function CardDetail({ card }: { card: any }) {
   const [activeCondition, setActiveCondition] = useState('All');
   const [hovered, setHovered] = useState<number | null>(null);
   const [listings, setListings] = useState<any[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [priceData, setPriceData] = useState<{ date: string; raw: number }[]>([]);
+  const [priceLoading, setPriceLoading] = useState(true);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -55,9 +39,49 @@ export default function CardDetail({ card }: { card: any }) {
       .then(d => setListings(d.listings || []))
   }, [card.slug]);
 
+  useEffect(() => {
+    setPriceLoading(true);
+    fetch(`/api/ebay/sold-prices?card=${encodeURIComponent(card.name)}&set=${encodeURIComponent(card.set)}&slug=${card.slug}`)
+      .then(r => r.json())
+      .then(d => {
+        const prices = d.prices || [];
+        if (prices.length === 0) {
+          setPriceData([]);
+          setPriceLoading(false);
+          return;
+        }
+
+        // Group by month and average prices
+        const grouped: Record<string, number[]> = {};
+        prices.forEach((p: any) => {
+          const date = new Date(p.sold_at);
+          const key = `${date.getFullYear()}-${date.getMonth()}`;
+          if (!grouped[key]) grouped[key] = [];
+          grouped[key].push(p.price);
+        });
+
+        const chartData = Object.entries(grouped)
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([key, vals]) => {
+            const [year, month] = key.split('-').map(Number);
+            const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+            return { date: MONTH_LABELS[month], raw: parseFloat(avg.toFixed(2)) };
+          });
+
+        setPriceData(chartData);
+        setPriceLoading(false);
+      })
+      .catch(() => setPriceLoading(false));
+  }, [card.slug]);
+
+  const firstPrice = priceData[0]?.raw ?? 0;
+  const lastPrice = priceData[priceData.length - 1]?.raw ?? 0;
+  const priceDiff = firstPrice > 0 ? ((lastPrice - firstPrice) / firstPrice * 100).toFixed(1) : '0.0';
+  const priceUp = lastPrice >= firstPrice;
+
   const filtered = listings.filter(l => {
     if (activeCondition === 'All') return true;
-    const map: Record<string,string> = { M: 'Mint', NM: 'NM', EX: 'Excellent', GD: 'Good', PL: 'Played' };
+    const map: Record<string, string> = { M: 'Mint', NM: 'NM', EX: 'Excellent', GD: 'Good', PL: 'Played' };
     return l.condition === activeCondition || l.condition === map[activeCondition];
   });
   const sorted = [...filtered].sort((a, b) => a.price - b.price);
@@ -66,11 +90,9 @@ export default function CardDetail({ card }: { card: any }) {
 
   return (
     <div style={{ background: '#1a1a1c', minHeight: '100vh', color: '#fff', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
-
       <div style={{ background: '#a67abf', padding: 7, textAlign: 'center', fontSize: 11, letterSpacing: 2, fontWeight: 700 }}>
         DÉ JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
       </div>
-
       <header style={{ background: '#1f1f21', borderBottom: '1px solid #2e2e31', padding: '0 20px' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
           <a href="/"><img src="/logo.png" alt="Tokyo TCG" style={{ height: 48 }} /></a>
@@ -81,7 +103,6 @@ export default function CardDetail({ card }: { card: any }) {
           </nav>
         </div>
       </header>
-
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '14px 16px', fontSize: 12, color: '#666', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
         <a href="/browse" style={{ color: '#aaa', textDecoration: 'none' }}>Browse</a>
         <span>›</span>
@@ -89,9 +110,7 @@ export default function CardDetail({ card }: { card: any }) {
         <span>›</span>
         <span style={{ color: '#a67abf' }}>{card.name}</span>
       </div>
-
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: isMobile ? '0 16px 48px' : '0 32px 64px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 20 }}>
-
         {/* LEFT: card image + info */}
         <div style={{ width: isMobile ? '100%' : 240, flexShrink: 0 }}>
           {isMobile ? (
@@ -113,13 +132,11 @@ export default function CardDetail({ card }: { card: any }) {
               </div>
             </div>
           ) : (
-            <>
-              <div style={{ borderRadius: 12, background: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', marginBottom: 10 }}>
-                <div style={{ padding: 8 }}>
-                  <img src={card.image} alt={card.name} style={{ width: '100%', display: 'block', borderRadius: 8 }} />
-                </div>
+            <div style={{ borderRadius: 12, background: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', marginBottom: 10 }}>
+              <div style={{ padding: 8 }}>
+                <img src={card.image} alt={card.name} style={{ width: '100%', display: 'block', borderRadius: 8 }} />
               </div>
-            </>
+            </div>
           )}
           <div style={{ background: '#1f1f21', border: '1px solid #2e2e31', borderRadius: 12, padding: '12px 14px' }}>
             <div style={{ fontSize: 10, color: '#555', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Kaartinfo</div>
@@ -137,10 +154,8 @@ export default function CardDetail({ card }: { card: any }) {
             ))}
           </div>
         </div>
-
         {/* RIGHT: price + listings */}
         <div style={{ flex: 1, minWidth: 0 }}>
-
           {!isMobile && (
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
               <div>
@@ -157,23 +172,31 @@ export default function CardDetail({ card }: { card: any }) {
               </div>
             </div>
           )}
-
           <div style={{ background: '#1f1f21', border: '1px solid #2e2e31', borderRadius: 12, padding: '16px 18px', marginBottom: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
               <div style={{ fontSize: 13, fontWeight: 700 }}>Prijsontwikkeling</div>
-              <div style={{ fontSize: 11, color: '#666' }}>Raw · NM · 12 maanden</div>
+              <div style={{ fontSize: 11, color: '#666' }}>Verkocht op eBay · 12 maanden</div>
             </div>
-            <ResponsiveContainer width="100%" height={130}>
-              <LineChart data={priceData} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2e2e31" />
-                <XAxis dataKey="date" tick={{ fill: '#555', fontSize: 10 }} tickLine={false} axisLine={false} />
-                <YAxis tick={{ fill: '#555', fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(v: number) => '€' + v} />
-                <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="raw" stroke="#a67abf" strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
+            {priceLoading ? (
+              <div style={{ height: 130, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', fontSize: 12 }}>
+                Prijzen laden...
+              </div>
+            ) : priceData.length === 0 ? (
+              <div style={{ height: 130, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', fontSize: 12 }}>
+                Nog geen verkoopdata beschikbaar.
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height={130}>
+                <LineChart data={priceData} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#2e2e31" />
+                  <XAxis dataKey="date" tick={{ fill: '#555', fontSize: 10 }} tickLine={false} axisLine={false} />
+                  <YAxis tick={{ fill: '#555', fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(v: number) => '€' + v} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Line type="monotone" dataKey="raw" stroke="#a67abf" strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
           </div>
-
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
               <div style={{ fontSize: 14, fontWeight: 700 }}>
@@ -191,7 +214,6 @@ export default function CardDetail({ card }: { card: any }) {
                 ))}
               </div>
             </div>
-
             {isMobile ? (
               sorted.length === 0 ? (
                 <div style={{ padding: '32px 12px', textAlign: 'center', color: '#555', fontSize: 13 }}>

@@ -8,7 +8,7 @@ const supabase = createClient(
 
 async function fetchSoldPrices(cardName: string, setName: string, marketplace: string) {
   const appId = process.env.EBAY_CLIENT_ID;
-  const query = encodeURIComponent(`${cardName} ${setName} pokemon card`);
+  const query = encodeURIComponent(`${cardName} ${setName} pokemon card japanese -PSA -BGS -CGC -graded`);
 
   const url = `https://svcs.ebay.com/services/search/FindingService/v1` +
     `?OPERATION-NAME=findCompletedItems` +
