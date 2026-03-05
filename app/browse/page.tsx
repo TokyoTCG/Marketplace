@@ -77,7 +77,7 @@ export default function Browse() {
   return (
     <div style={{ backgroundColor: '#1a1a1c', minHeight: '100vh', color: '#ffffff', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
       <div style={{ backgroundColor: '#a67abf', padding: '7px', textAlign: 'center', fontSize: '11px', letterSpacing: '2px', fontWeight: '700', color: '#ffffff' }}>
-        DE JAPANSE POKEMON MARKTPLAATS VAN NEDERLAND
+        DE JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
       </div>
       <SiteHeader />
 
