@@ -6,9 +6,19 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-async function fetchSoldPrices(cardName: string, setName: string, marketplace: string) {
+async function fetchSoldPrices(cardName: string, setName: string, marketplace: string, graded: boolean, grade?: string) {
   const appId = process.env.EBAY_CLIENT_ID;
-  const query = encodeURIComponent(`${cardName} ${setName} pokemon card japanese -PSA -BGS -CGC -graded`);
+
+  let queryStr = `${cardName} ${setName} pokemon card japanese`;
+  if (graded && grade) {
+    queryStr += ` "${grade}"`;
+  } else if (graded) {
+    queryStr += ` PSA`;
+  } else {
+    queryStr += ` -PSA -BGS -CGC -graded`;
+  }
+
+  const query = encodeURIComponent(queryStr);
 
   const url = `https://svcs.ebay.com/services/search/FindingService/v1` +
     `?OPERATION-NAME=findCompletedItems` +
@@ -24,7 +34,6 @@ async function fetchSoldPrices(cardName: string, setName: string, marketplace: s
 
   const res = await fetch(url);
   const data = await res.json();
-
   const items = data?.findCompletedItemsResponse?.[0]?.searchResult?.[0]?.item || [];
 
   return items.map((item: any) => ({
@@ -41,24 +50,24 @@ export async function GET(request: Request) {
   const cardName = searchParams.get('card') || '';
   const setName = searchParams.get('set') || '';
   const cardSlug = searchParams.get('slug') || cardName.toLowerCase().replace(/\s+/g, '-');
+  const graded = searchParams.get('graded') === 'true';
+  const grade = searchParams.get('grade') || undefined;
 
   if (!cardName) {
     return NextResponse.json({ error: 'card parameter is required' }, { status: 400 });
   }
 
   try {
-    // Fetch from eBay
     const [de, us, nl] = await Promise.all([
-      fetchSoldPrices(cardName, setName, 'EBAY-DE'),
-      fetchSoldPrices(cardName, setName, 'EBAY-US'),
-      fetchSoldPrices(cardName, setName, 'EBAY-NL'),
+      fetchSoldPrices(cardName, setName, 'EBAY-DE', graded, grade),
+      fetchSoldPrices(cardName, setName, 'EBAY-US', graded, grade),
+      fetchSoldPrices(cardName, setName, 'EBAY-NL', graded, grade),
     ]);
 
     const allPrices = [...de, ...us, ...nl]
       .filter(p => !isNaN(p.price) && p.price > 0)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    // Save to Supabase
     if (allPrices.length > 0) {
       await supabase.from('card_price_history').insert(
         allPrices.map(p => ({
@@ -70,16 +79,23 @@ export async function GET(request: Request) {
           marketplace: p.marketplace,
           listing_title: p.title,
           sold_at: p.date,
+          psa_grade: grade || null,
         }))
       );
     }
 
-    // Always return from Supabase so chart has full history
-    const { data: history } = await supabase
+    // Build query for history
+    let query = supabase
       .from('card_price_history')
-      .select('price, currency, sold_at, marketplace')
+      .select('price, currency, sold_at, marketplace, psa_grade')
       .eq('card_slug', cardSlug)
       .order('sold_at', { ascending: true });
+
+    if (grade) {
+      query = query.eq('psa_grade', grade);
+    }
+
+    const { data: history } = await query;
 
     return NextResponse.json({ prices: history || [] });
 
