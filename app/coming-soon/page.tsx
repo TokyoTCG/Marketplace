@@ -56,8 +56,8 @@ export default function ComingSoon() {
 
       <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', maxWidth: '500px', width: '100%' }}>
 
-        <div style={{ fontSize: '10px', letterSpacing: '4px', color: '#a67abf', marginBottom: '20px', opacity: 0.7 }}>
-          // DÉ JAPANSE POKÉMON MARKTPLAATS VAN NL
+        <div style={{ fontSize: '10px', letterSpacing: '4px', color: '#d4b0e8', marginBottom: '20px', opacity: 0.9 }}>
+          // DE JAPANSE POKÉMON MARKTPLAATS VAN NL
         </div>
 
         <h1 style={{ fontSize: 'clamp(52px, 13vw, 110px)', fontWeight: '700', color: '#ffffff', margin: '0 0 6px', lineHeight: 1, letterSpacing: '-2px' }}>
@@ -71,7 +71,7 @@ export default function ComingSoon() {
 
         {!showInput ? (
           <button onClick={() => setShowInput(true)}
-            style={{ background: 'transparent', border: '1px solid #a67abf33', color: '#a67abf66', fontSize: '10px', cursor: 'pointer', letterSpacing: '5px', padding: '12px 24px', fontFamily: "'Courier New', monospace", transition: 'all 0.2s' }}
+            style={{ background: 'transparent', border: '1px solid #a67abf33', color: '#d4b0e888', fontSize: '10px', cursor: 'pointer', letterSpacing: '5px', padding: '12px 24px', fontFamily: "'Courier New', monospace", transition: 'all 0.2s' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#a67abf99'; e.currentTarget.style.color = '#a67abf'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = '#a67abf33'; e.currentTarget.style.color = '#a67abf66'; }}
           >

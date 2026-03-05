@@ -1,6 +1,6 @@
 'use client'
 import SiteHeader from '@/components/SiteHeader'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
@@ -80,6 +80,24 @@ export default function NewListing() {
   const [notes, setNotes] = useState('')
   const [photos, setPhotos] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
+  useEffect(() => {
+    const container = document.getElementById('twinkle-raw')
+    if (!container) return
+    for (let i = 0; i < 80; i++) {
+      const dot = document.createElement('div')
+      const size = Math.random() * 2 + 1
+      dot.style.position = 'absolute'
+      dot.style.width = size + 'px'
+      dot.style.height = size + 'px'
+      dot.style.background = 'white'
+      dot.style.borderRadius = '50%'
+      dot.style.left = Math.random() * 100 + '%'
+      dot.style.top = Math.random() * 100 + '%'
+      dot.style.animation = `twinkle ${Math.random() * 3 + 1}s ease-in-out ${Math.random() * 2}s infinite`
+      dot.style.opacity = '0'
+      container.appendChild(dot)
+    }
+  }, [])
 
   const suggestions = useMemo(() => {
     if (!searchTerm) return []
@@ -152,7 +170,9 @@ export default function NewListing() {
   }
 
   return (
-    <div style={{ backgroundColor: '#1a1a1c', minHeight: '100vh', color: '#ffffff', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
+    <div style={{ backgroundColor: '#1a1a1c', minHeight: '100vh', color: '#ffffff', fontFamily: "'Segoe UI', system-ui, sans-serif", position: 'relative' }}>
+      <style>{`@keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } }`}</style>
+<div id="twinkle-raw" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }} />
       {/* PURPLE ANNOUNCEMENT BAR */}
       <div style={{ backgroundColor: '#a67abf', padding: '7px', textAlign: 'center', fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>
         DE JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
@@ -289,3 +309,4 @@ export default function NewListing() {
     </div>
   )
 }
+
