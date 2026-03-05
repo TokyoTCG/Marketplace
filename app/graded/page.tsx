@@ -2,7 +2,7 @@
 import { cardData } from '@/lib/cardData';
 import SiteHeader from '@/components/SiteHeader';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function getCardNumber(number: string): string {
   const match = number.match(/(\d+\/\d+)/);
@@ -51,6 +51,15 @@ const SET_COLORS: Record<string, string> = {
 
 export default function GradedBrowse() {
   const [search, setSearch] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+  const [showSeries, setShowSeries] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const allCards = cardData.filter(card =>
     card.name.toLowerCase().includes(search.toLowerCase())
@@ -71,59 +80,78 @@ export default function GradedBrowse() {
       </div>
       <SiteHeader />
 
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '32px', display: 'flex', gap: '28px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: isMobile ? '16px' : '32px', display: 'flex', gap: '28px' }}>
 
-        {/* SIDEBAR */}
-        <aside style={{ width: '180px', flexShrink: 0 }}>
-          <div style={{ position: 'sticky', top: '20px', backgroundColor: '#1f1f21', borderRadius: '8px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
-            <div style={{ padding: '12px 14px', borderBottom: '1px solid #2e2e31', fontSize: '11px', fontWeight: '700', letterSpacing: '1px', color: '#aaaaaa' }}>
-              SERIES
+        {/* SIDEBAR - desktop only */}
+        {!isMobile && (
+          <aside style={{ width: '180px', flexShrink: 0 }}>
+            <div style={{ position: 'sticky', top: '20px', backgroundColor: '#1f1f21', borderRadius: '8px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
+              <div style={{ padding: '12px 14px', borderBottom: '1px solid #2e2e31', fontSize: '11px', fontWeight: '700', letterSpacing: '1px', color: '#aaaaaa' }}>
+                SERIES
+              </div>
+              <div style={{ padding: '6px' }}>
+                {sets.map(set => (
+                  <a key={set} href={'#' + set.replace(/[^a-z0-9]/gi, '-').toLowerCase()}
+                    style={{ display: 'block', padding: '6px 8px', borderRadius: '4px', color: '#aaaaaa', textDecoration: 'none', fontSize: '12px' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#aaaaaa')}
+                  >
+                    {set}
+                  </a>
+                ))}
+              </div>
             </div>
-            <div style={{ padding: '6px' }}>
+          </aside>
+        )}
+
+        {/* MAIN */}
+        <main style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'inline-block', background: '#a67abf', borderRadius: '6px', padding: '3px 10px', fontSize: '11px', fontWeight: '700', letterSpacing: '1px' }}>PSA GRADED</div>
+            {isMobile && (
+              <button onClick={() => setShowSeries(!showSeries)}
+                style={{ background: '#1f1f21', border: '1px solid #2e2e31', borderRadius: '6px', padding: '3px 10px', fontSize: '11px', fontWeight: '700', letterSpacing: '1px', color: '#aaa', cursor: 'pointer' }}>
+                {showSeries ? 'Verberg series' : 'Series'}
+              </button>
+            )}
+          </div>
+
+          {/* Mobile series dropdown */}
+          {isMobile && showSeries && (
+            <div style={{ backgroundColor: '#1f1f21', border: '1px solid #2e2e31', borderRadius: '8px', padding: '8px', marginBottom: '16px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {sets.map(set => (
-                <a
-                  key={set}
-                  href={'#' + set.replace(/[^a-z0-9]/gi, '-').toLowerCase()}
-                  style={{ display: 'block', padding: '6px 8px', borderRadius: '4px', color: '#aaaaaa', textDecoration: 'none', fontSize: '12px' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#aaaaaa')}
-                >
+                <a key={set} href={'#' + set.replace(/[^a-z0-9]/gi, '-').toLowerCase()}
+                  onClick={() => setShowSeries(false)}
+                  style={{ color: '#aaa', textDecoration: 'none', fontSize: '12px', padding: '4px 8px', background: '#2b2b2e', borderRadius: '4px' }}>
                   {set}
                 </a>
               ))}
             </div>
-          </div>
-        </aside>
-
-        {/* MAIN */}
-        <main style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ display: 'inline-block', background: '#a67abf', borderRadius: '6px', padding: '3px 10px', fontSize: '11px', fontWeight: '700', letterSpacing: '1px' }}>PSA GRADED</div>
-          </div>
+          )}
 
           <input
             placeholder="Zoek een Pokemon..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            style={{ width: '100%', maxWidth: '400px', backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '10px 16px', color: '#ffffff', fontSize: '14px', outline: 'none', marginBottom: '32px', boxSizing: 'border-box' }}
+            style={{ width: '100%', maxWidth: isMobile ? '100%' : '400px', backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '10px 16px', color: '#ffffff', fontSize: '14px', outline: 'none', marginBottom: '24px', boxSizing: 'border-box' }}
           />
 
           {sets.filter(set => bySet[set]).map(set => (
-            <div key={set} id={set.replace(/[^a-z0-9]/gi, '-').toLowerCase()} style={{ marginBottom: '48px' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', paddingBottom: '10px', borderBottom: '1px solid #2e2e31' }}>
+            <div key={set} id={set.replace(/[^a-z0-9]/gi, '-').toLowerCase()} style={{ marginBottom: '40px' }}>
+              <h2 style={{ fontSize: isMobile ? '15px' : '18px', fontWeight: '700', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid #2e2e31' }}>
                 {set}
               </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
                 {bySet[set].map(card => (
                   <Link key={card.slug} href={`/graded/${card.slug}`} style={{ textDecoration: 'none' }}>
                     <div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: 'pointer' }}>
                       <div style={{ padding: '6px' }}>
                         <img src={card.image} alt={card.name} style={{ width: '100%', display: 'block', borderRadius: '8px' }} />
                       </div>
-                      <div style={{ padding: '10px 12px' }}>
-                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#ffffff' }}>{card.name}</div>
-                        <div style={{ fontSize: '11px', color: SET_COLORS[card.set] || '#aaa', marginTop: '4px' }}>{card.set}</div>
-                        <div style={{ fontSize: '10px', color: '#666', marginTop: '6px' }}>{getCardNumber(card.number)}</div>
+                      <div style={{ padding: '8px 10px' }}>
+                        <div style={{ fontSize: isMobile ? '12px' : '13px', fontWeight: '600', color: '#ffffff' }}>{card.name}</div>
+                        <div style={{ fontSize: '11px', color: SET_COLORS[card.set] || '#aaa', marginTop: '3px' }}>{card.set}</div>
+                        <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>{getCardNumber(card.number)}</div>
                       </div>
                     </div>
                   </Link>
