@@ -1,5 +1,6 @@
 'use client'
 import SiteHeader from '@/components/SiteHeader'
+import CardPhotoCapture from '@/components/CardPhotoCapture'
 import { useState, useMemo, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -9,35 +10,31 @@ const WORKING_CARDS = cardData.map(c => ({ name: c.name, set: c.set, src: c.imag
 
 export default function NewListing() {
   const router = useRouter()
+  const { data: session, status } = useSession()
   const [searchTerm, setSearchTerm] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
-  const [selectedCard, setSelectedCard] = useState({ name: '', set: '' })
+  const [selectedCard, setSelectedCard] = useState<any>(null)
   const [showDropdown, setShowDropdown] = useState(false)
   const [condition, setCondition] = useState('')
   const [price, setPrice] = useState('')
   const [quantity, setQuantity] = useState('1')
   const [notes, setNotes] = useState('')
-  const [photos, setPhotos] = useState<File[]>([])
-  const [previews, setPreviews] = useState<string[]>([])
+  const [photos, setPhotos] = useState<string[]>([])
+  const [photosConfirmed, setPhotosConfirmed] = useState(false)
+  const [fromCamera, setFromCamera] = useState(false)
+
   useEffect(() => {
+    if (status === 'unauthenticated') router.push('/login?callbackUrl=/listings/new')
     const container = document.getElementById('twinkle-raw')
-    if (!container) return
+    if (!container || container.childNodes.length > 0) return
     for (let i = 0; i < 80; i++) {
       const dot = document.createElement('div')
       const size = Math.random() * 2 + 1
-      dot.style.position = 'absolute'
-      dot.style.width = size + 'px'
-      dot.style.height = size + 'px'
-      dot.style.background = 'white'
-      dot.style.borderRadius = '50%'
-      dot.style.left = Math.random() * 100 + '%'
-      dot.style.top = Math.random() * 100 + '%'
-      dot.style.animation = `twinkle ${Math.random() * 3 + 1}s ease-in-out ${Math.random() * 2}s infinite`
-      dot.style.opacity = '0'
+      dot.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:white;border-radius:50%;left:${Math.random()*100}%;top:${Math.random()*100}%;animation:twinkle ${Math.random()*3+1}s ease-in-out ${Math.random()*2}s infinite;opacity:0`
       container.appendChild(dot)
     }
-  }, [])
+  }, [status])
 
   const suggestions = useMemo(() => {
     if (!searchTerm) return []
@@ -52,201 +49,134 @@ export default function NewListing() {
     setShowDropdown(false)
   }
 
-  function handlePhotos(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files || [])
-    const newFiles = [...photos, ...files].slice(0, 4)
-    setPhotos(newFiles)
-    setPreviews(newFiles.map(f => URL.createObjectURL(f)))
-  }
-
-  function removePhoto(index: number) {
-    const newPhotos = photos.filter((_, i) => i !== index)
-    setPhotos(newPhotos)
-    setPreviews(newPhotos.map(f => URL.createObjectURL(f)))
-  }
-
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    backgroundColor: '#2b2b2e',
-    border: '1px solid #3a3a3d',
-    borderRadius: '8px',
-    padding: '12px 16px',
-    color: '#ffffff',
-    fontSize: '14px',
-    outline: 'none',
-    marginTop: '8px',
-    boxSizing: 'border-box',
-  }
-
-  const labelStyle: React.CSSProperties = {
-    display: 'block',
-    fontSize: '11px',
-    fontWeight: '700',
-    color: '#aaaaaa',
-    letterSpacing: '1px',
-  }
-
   async function handleSubmit() {
-    if (!selectedCard.name || !condition || !price) {
-      setSubmitError('Vul alle verplichte velden in.')
-      return
-    }
+    if (!selectedCard) { setSubmitError('Selecteer eerst een kaart.'); return }
+    if (!condition || !price) { setSubmitError('Vul alle verplichte velden in.'); return }
+    if (!photosConfirmed || photos.length < 2) { setSubmitError("Maak minimaal 2 foto's (voor- en achterkant)."); return }
     setSubmitting(true)
     setSubmitError('')
-    const cardEntry = WORKING_CARDS.find(c => c.name === selectedCard.name && c.set === selectedCard.set)
-    const slug = cardEntry?.src.replace('/cards/', '').replace('.webp', '') || ''
+    const cardSlug = selectedCard.src.replace('/cards/', '').replace('.webp', '')
     const res = await fetch('/api/listings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cardSlug: slug, cardName: selectedCard.name, cardSet: selectedCard.set, condition, price, quantity, notes })
+      body: JSON.stringify({ cardSlug, cardName: selectedCard.name, cardSet: selectedCard.set, condition, price, quantity, notes, photos, graded: false, fromCamera })
     })
     const data = await res.json()
-    if (!res.ok) {
-      setSubmitError(data.error || 'Er is iets misgegaan.')
-      setSubmitting(false)
-    } else {
-      router.push('/cards/' + slug)
-    }
+    if (!res.ok) { setSubmitError(data.error || 'Er is iets misgegaan.'); setSubmitting(false) }
+    else router.push('/cards/' + cardSlug)
   }
+
+  const inputStyle: React.CSSProperties = { width: '100%', backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '12px 16px', color: '#ffffff', fontSize: '14px', outline: 'none', marginTop: '8px', boxSizing: 'border-box' }
+  const labelStyle: React.CSSProperties = { display: 'block', fontSize: '11px', fontWeight: '700', color: '#aaaaaa', letterSpacing: '1px' }
 
   return (
     <div style={{ backgroundColor: '#1a1a1c', minHeight: '100vh', color: '#ffffff', fontFamily: "'Segoe UI', system-ui, sans-serif", position: 'relative' }}>
       <style>{`@keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } }`}</style>
-<div id="twinkle-raw" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }} />
-      {/* PURPLE ANNOUNCEMENT BAR */}
-      <div style={{ backgroundColor: '#a67abf', padding: '7px', textAlign: 'center', fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>
-        DE JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
-      </div>
-
-      {/* HEADER WITH LOGO */}
-      <SiteHeader activePage="verkopen" />
-
-      {/* MAIN CONTENT */}
-      <main style={{ maxWidth: '1050px', margin: '0 auto', padding: '40px 32px' }}>
-        <a href="/sell-choose" style={{ color: '#a67abf', textDecoration: 'none', fontSize: '14px', display: 'inline-block', marginBottom: '20px' }}>← Terug</a>
-
-        <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '10px' }}>Kaart verkopen</h1>
-        <p style={{ color: '#aaaaaa', marginBottom: '40px' }}>Zoek een kaart op en vul de details in</p>
-
-        <div style={{ display: 'flex', gap: '40px' }}>
-          <div style={{ flex: 1 }}>
-            {/* SEARCH */}
-            <div style={{ marginBottom: '25px', position: 'relative' }}>
-              <label style={labelStyle}>ZOEK KAART</label>
-              <input
-                type="text"
-                placeholder="Zoek kaart..."
-                value={searchTerm}
-                onFocus={() => setShowDropdown(true)}
-                onChange={(e) => { setSearchTerm(e.target.value); setShowDropdown(true) }}
-                style={inputStyle}
-              />
-              {showDropdown && suggestions.length > 0 && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', marginTop: '4px', zIndex: 100, overflow: 'hidden' }}>
-                  {suggestions.map(card => (
-                    <div key={card.name} onClick={() => handleSelect(card)}
-                      style={{ padding: '8px 16px', cursor: 'pointer', borderBottom: '1px solid #3a3a3d', display: 'flex', alignItems: 'center', gap: '12px' }}
-                      onMouseEnter={e => e.currentTarget.style.backgroundColor = '#3a3a3d'}
-                      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
-                      <img src={card.src} style={{ width: '35px', borderRadius: '4px' }} alt="" />
-                      <div>
-                        <div style={{ fontSize: '14px', fontWeight: '600' }}>{card.name}</div>
-                        <div style={{ fontSize: '11px', color: '#888' }}>{card.set}</div>
+      <div id="twinkle-raw" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }} />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ backgroundColor: '#a67abf', padding: '7px', textAlign: 'center', fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>
+          DE JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
+        </div>
+        <SiteHeader activePage="verkopen" />
+        <main style={{ maxWidth: '1050px', margin: '0 auto', padding: '40px 32px' }}>
+          <a href="/sell-choose" style={{ color: '#a67abf', textDecoration: 'none', fontSize: '14px', display: 'inline-block', marginBottom: '20px' }}>← Terug</a>
+          <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '10px' }}>Kaart verkopen</h1>
+          <p style={{ color: '#aaaaaa', marginBottom: '40px' }}>Zoek een kaart op en vul de details in</p>
+          <div style={{ display: 'flex', gap: '40px' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ marginBottom: '25px', position: 'relative' }}>
+                <label style={labelStyle}>ZOEK KAART *</label>
+                <input type="text" placeholder="Zoek kaart..." value={searchTerm}
+                  onFocus={() => setShowDropdown(true)}
+                  onChange={(e) => { setSearchTerm(e.target.value); setShowDropdown(true); setSelectedCard(null) }}
+                  style={{ ...inputStyle, borderColor: !selectedCard && searchTerm ? '#ff6b6b' : '#3a3a3d' }}
+                />
+                {showDropdown && suggestions.length > 0 && (
+                  <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', marginTop: '4px', zIndex: 100, overflow: 'hidden' }}>
+                    {suggestions.map(card => (
+                      <div key={card.name + card.set} onClick={() => handleSelect(card)}
+                        style={{ padding: '8px 16px', cursor: 'pointer', borderBottom: '1px solid #3a3a3d', display: 'flex', alignItems: 'center', gap: '12px' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#3a3a3d'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
+                        <img src={card.src} style={{ width: '35px', borderRadius: '4px' }} alt="" />
+                        <div>
+                          <div style={{ fontSize: '14px', fontWeight: '600' }}>{card.name}</div>
+                          <div style={{ fontSize: '11px', color: '#888' }}>{card.set}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div style={{ marginBottom: '25px' }}>
-              <label style={labelStyle}>KAARTNAAM</label>
-              <input value={selectedCard.name} readOnly placeholder="Naam van de kaart" style={{ ...inputStyle, backgroundColor: '#1f1f21', color: '#888' }} />
-            </div>
-
-            <div style={{ marginBottom: '25px' }}>
-              <label style={labelStyle}>SET</label>
-              <input value={selectedCard.set} readOnly placeholder="Set naam" style={{ ...inputStyle, backgroundColor: '#1f1f21', color: '#888' }} />
-            </div>
-
-            <div style={{ marginBottom: '25px' }}>
-              <label style={labelStyle}>CONDITIE</label>
-              <select value={condition} onChange={e => setCondition(e.target.value)} style={inputStyle}>
-                <option value="">Selecteer conditie</option>
-                <option value="M">Mint</option>
-                <option value="Near Mint">Near Mint</option>
-                <option value="Excellent">Excellent</option>
-                <option value="Good">Good</option>
-                <option value="Played">Played</option>
-              </select>
-            </div>
-
-            <div style={{ marginBottom: '25px' }}>
-              <label style={labelStyle}>PRIJS (€)</label>
-              <input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="0.00" style={inputStyle} />
-            </div>
-
-            <div style={{ marginBottom: '25px' }}>
-              <label style={labelStyle}>AANTAL</label>
-              <input type="number" value={quantity} onChange={e => setQuantity(e.target.value)} style={inputStyle} />
-            </div>
-
-            <div style={{ marginBottom: '40px' }}>
-              <label style={labelStyle}>NOTITIES (OPTIONEEL)</label>
-              <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Extra informatie..." style={{ ...inputStyle, height: '100px', resize: 'none' }} />
-            </div>
-
-            {submitError && <p style={{ color: '#ff6b6b', fontSize: '13px', marginBottom: '12px' }}>{submitError}</p>}
-            <button onClick={handleSubmit} disabled={submitting} style={{ width: '100%', backgroundColor: '#a67abf', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '16px', fontWeight: '700', cursor: submitting ? 'not-allowed' : 'pointer', fontSize: '14px', letterSpacing: '1px', opacity: submitting ? 0.6 : 1 }}>
-              {submitting ? 'AANMAKEN...' : 'LISTING AANMAKEN'}
-            </button>
-          </div>
-
-          {/* UPLOAD BOX */}
-          <div style={{ width: '360px' }}>
-            <label style={labelStyle}>FOTO'S (MAX 4)</label>
-            {previews.length === 0 ? (
-              <div
-                style={{ marginTop: '8px', width: '100%', aspectRatio: '1.5/1', border: '1px dashed #3a3a3d', borderRadius: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', backgroundColor: '#1f1f21', color: '#888' }}
-                onClick={() => document.getElementById('photo-input')?.click()}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = '#a67abf')}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = '#3a3a3d')}
-              >
-                <img src="https://img.icons8.com/ios/50/888888/camera--v1.png" style={{ width: '40px', marginBottom: '15px', opacity: 0.5 }} alt="" />
-                <div style={{ fontSize: '14px', fontWeight: '500' }}>Klik om foto's te uploaden</div>
-                <div style={{ fontSize: '11px', marginTop: '5px' }}>JPG, PNG — max 4 foto's</div>
-                <input id="photo-input" type="file" accept="image/*" multiple onChange={handlePhotos} style={{ display: 'none' }} />
-              </div>
-            ) : (
-              <div style={{ marginTop: '8px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
-                  {previews.map((src, i) => (
-                    <div key={i} style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', aspectRatio: '3/4' }}>
-                      <img src={src} alt={'foto ' + (i + 1)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <button onClick={() => removePhoto(i)}
-                        style={{ position: 'absolute', top: '6px', right: '6px', backgroundColor: 'rgba(0,0,0,0.7)', color: '#ffffff', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
-                        ×
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                {previews.length < 4 && (
-                  <div
-                    style={{ border: '1px dashed #3a3a3d', borderRadius: '8px', padding: '12px', textAlign: 'center', cursor: 'pointer', color: '#888', fontSize: '13px', backgroundColor: '#1f1f21' }}
-                    onClick={() => document.getElementById('photo-input')?.click()}
-                    onMouseEnter={e => (e.currentTarget.style.borderColor = '#a67abf')}
-                    onMouseLeave={e => (e.currentTarget.style.borderColor = '#3a3a3d')}
-                  >
-                    + Nog {4 - previews.length} foto{4 - previews.length !== 1 ? "'s" : ''} toevoegen
-                    <input id="photo-input" type="file" accept="image/*" multiple onChange={handlePhotos} style={{ display: 'none' }} />
+                    ))}
                   </div>
                 )}
               </div>
-            )}
+              {selectedCard && (
+                <div style={{ background: '#1f1f21', border: '1px solid #a67abf40', borderRadius: '10px', padding: '12px', marginBottom: '25px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <img src={selectedCard.src} style={{ width: '50px', borderRadius: '6px' }} alt="" />
+                  <div>
+                    <div style={{ fontWeight: '700', fontSize: '14px' }}>{selectedCard.name}</div>
+                    <div style={{ fontSize: '12px', color: '#888' }}>{selectedCard.set}</div>
+                  </div>
+                  <div style={{ marginLeft: 'auto', fontSize: '18px' }}>✓</div>
+                </div>
+              )}
+              <div style={{ marginBottom: '25px' }}>
+                <label style={labelStyle}>CONDITIE *</label>
+                <select value={condition} onChange={e => setCondition(e.target.value)} style={inputStyle}>
+                  <option value="">Selecteer conditie</option>
+                  <option value="M">Mint</option>
+                  <option value="NM">Near Mint</option>
+                  <option value="EX">Excellent</option>
+                  <option value="GD">Good</option>
+                  <option value="PL">Played</option>
+                </select>
+              </div>
+              <div style={{ marginBottom: '25px' }}>
+                <label style={labelStyle}>PRIJS (€) *</label>
+                <input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="0.00" style={inputStyle} />
+              </div>
+              <div style={{ marginBottom: '25px' }}>
+                <label style={labelStyle}>AANTAL</label>
+                <input type="number" value={quantity} onChange={e => setQuantity(e.target.value)} style={inputStyle} />
+              </div>
+              <div style={{ marginBottom: '40px' }}>
+                <label style={labelStyle}>NOTITIES (OPTIONEEL)</label>
+                <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Extra informatie..." style={{ ...inputStyle, height: '100px', resize: 'none' }} />
+              </div>
+              {submitError && <p style={{ color: '#ff6b6b', fontSize: '13px', marginBottom: '12px' }}>{submitError}</p>}
+              <button onClick={handleSubmit} disabled={submitting || !photosConfirmed}
+                style={{ width: '100%', backgroundColor: photosConfirmed ? '#a67abf' : '#3a3a3d', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '16px', fontWeight: '700', cursor: submitting || !photosConfirmed ? 'not-allowed' : 'pointer', fontSize: '14px', letterSpacing: '1px', opacity: submitting ? 0.6 : 1 }}>
+                {submitting ? 'AANMAKEN...' : photosConfirmed ? 'LISTING AANMAKEN' : "MAAK EERST FOTO'S"}
+              </button>
+            </div>
+            <div style={{ width: '360px' }}>
+              <label style={labelStyle}>FOTO'S * (VOOR- EN ACHTERKANT VEREIST)</label>
+              {!photosConfirmed ? (
+                <CardPhotoCapture onPhotosReady={(front, back, isCamera) => {
+                  setPhotos([front, back])
+                  setPhotosConfirmed(true)
+                  setFromCamera(isCamera)
+                }} />
+              ) : (
+                <div style={{ marginTop: '8px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
+                    {photos.map((src, i) => (
+                      <div key={i} style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', aspectRatio: '3/4' }}>
+                        <img src={src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+                        <div style={{ position: 'absolute', top: '6px', left: '6px', background: 'rgba(0,0,0,0.7)', borderRadius: '4px', padding: '2px 8px', fontSize: '10px', color: '#fff', fontWeight: '700' }}>
+                          {i === 0 ? 'VOOR' : 'ACHTER'}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={() => { setPhotos([]); setPhotosConfirmed(false) }}
+                    style={{ width: '100%', background: 'transparent', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '8px', color: '#888', fontSize: '12px', cursor: 'pointer' }}>
+                    ↺ Opnieuw fotograferen
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   )
 }
-
