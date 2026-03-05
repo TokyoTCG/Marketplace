@@ -5,7 +5,7 @@ export async function GET(request) {
   const challengeCode = searchParams.get('challenge_code');
 
   const verificationToken = process.env.EBAY_VERIFICATION_TOKEN;
-  const endpoint = 'https://tokyotcg.nl/api/ebay/account-deletion';
+  const endpoint = 'https://www.tokyotcg.nl/api/ebay/account-deletion';
 
   const hash = crypto.createHash('sha256')
     .update(challengeCode + verificationToken + endpoint)
