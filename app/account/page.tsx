@@ -12,7 +12,15 @@ export default function Account() {
   const router = useRouter()
   const [activeSection, setActiveSection] = useState<Section>('overview')
   const [profileImage, setProfileImage] = useState<string | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [showNav, setShowNav] = useState(false)
   useInactivityLogout()
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -140,11 +148,11 @@ export default function Account() {
 
         <SiteHeader activePage="account" />
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px', display: 'flex', gap: '28px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: isMobile ? '16px' : '32px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: '28px' }}>
 
           {/* SIDEBAR */}
-          <aside style={{ width: '200px', flexShrink: 0 }}>
-            <div style={{ position: 'sticky', top: '20px', backgroundColor: '#1f1f21', borderRadius: '12px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
+          <aside style={{ width: isMobile ? '100%' : '200px', flexShrink: 0 }}>
+            <div style={{ position: isMobile ? 'relative' : 'sticky', top: '20px', backgroundColor: '#1f1f21', borderRadius: '12px', border: '1px solid #2e2e31', overflow: 'hidden' }}>
               <div style={{ padding: '20px', borderBottom: '1px solid #2e2e31', textAlign: 'center' }}>
                 <div
                   style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#a67abf33', border: '2px solid #a67abf', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: '800', color: '#a67abf', position: 'relative', cursor: 'pointer', overflow: 'hidden' }}
@@ -166,7 +174,12 @@ export default function Account() {
                   </span>
                 </div>
               </div>
-              <div style={{ padding: '6px' }}>
+              {isMobile && (
+                <button onClick={() => setShowNav(!showNav)} style={{ width: '100%', padding: '10px 16px', background: 'transparent', border: 'none', borderTop: '1px solid #2e2e31', color: '#a67abf', fontSize: '13px', fontWeight: '700', cursor: 'pointer', textAlign: 'left' }}>
+                  {activeSection ? navItems.find(n => n.id === activeSection)?.label : 'Menu'} {showNav ? '▲' : '▼'}
+                </button>
+                )}
+                <div style={{ padding: '6px', display: isMobile && !showNav ? 'none' : 'block' }}>
                 {navItems.map(item => (
                   <button key={item.id} onClick={() => setActiveSection(item.id)}
                     style={{ display: 'flex', alignItems: 'center', width: '100%', padding: '9px 12px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: activeSection === item.id ? '700' : '400', backgroundColor: activeSection === item.id ? '#a67abf22' : 'transparent', color: activeSection === item.id ? '#a67abf' : '#aaaaaa', textAlign: 'left' }}>
@@ -191,7 +204,7 @@ export default function Account() {
               <div>
                 <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '6px' }}>Welkom terug, {userName} <span style={{ color: '#a67abf', fontSize: '20px' }}>ᯓ★</span></h1>
                 <p style={{ color: '#aaaaaa', marginBottom: '28px', fontSize: '14px' }}>Hier is een overzicht van je account.</p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
                   {[
                     { label: 'Actieve listings', value: '0' },
                     { label: 'Verkopen totaal', value: '0' },
