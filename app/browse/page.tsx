@@ -52,6 +52,7 @@ const SET_COLORS: Record<string, string> = {
 export default function Browse() {
   const [search, setSearch] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [showSeries, setShowSeries] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -101,6 +102,24 @@ export default function Browse() {
         )}
 
         <main style={{ flex: 1, minWidth: 0 }}>
+          {isMobile && (
+            <div style={{ marginBottom: '12px' }}>
+              <button onClick={() => setShowSeries(s => !s)}
+                style={{ background: '#1f1f21', border: '1px solid #2e2e31', borderRadius: '6px', padding: '6px 12px', fontSize: '11px', fontWeight: '700', letterSpacing: '1px', color: '#aaa', cursor: 'pointer', marginBottom: '8px' }}>
+                Series {showSeries ? '▲' : '▼'}
+              </button>
+              {showSeries && (
+                <div style={{ backgroundColor: '#1f1f21', border: '1px solid #2e2e31', borderRadius: '8px', padding: '8px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {sets.map(set => (
+                    <a key={set} href={'#' + slugify(set)} onClick={() => setShowSeries(false)}
+                      style={{ color: '#aaa', textDecoration: 'none', fontSize: '12px', padding: '4px 8px', background: '#2b2b2e', borderRadius: '4px' }}>
+                      {set}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           <input
             placeholder="Zoek een Pokemon..."
             value={search}
