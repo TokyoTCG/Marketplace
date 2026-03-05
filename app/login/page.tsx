@@ -216,7 +216,7 @@ export default function LoginPage() {
                   <div>
                     <label style={{ ...labelStyle, textAlign: 'center' }}>VERIFICATIECODE</label>
                     <input
-                      type="number"
+                      type="text"
                       inputMode="numeric"
                       maxLength={6}
                       value={code}
