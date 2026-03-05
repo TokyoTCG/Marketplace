@@ -91,7 +91,7 @@ export default function CardDetail({ card }: { card: any }) {
   return (
     <div style={{ background: '#1a1a1c', minHeight: '100vh', color: '#fff', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
       <div style={{ background: '#a67abf', padding: 7, textAlign: 'center', fontSize: 11, letterSpacing: 2, fontWeight: 700 }}>
-        DÉ JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
+        DE JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
       </div>
       <header style={{ background: '#1f1f21', borderBottom: '1px solid #2e2e31', padding: '0 20px' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
