@@ -25,6 +25,7 @@ export default function CardDetail({ card }: { card: any }) {
   const [isMobile, setIsMobile] = useState(false);
   const [priceData, setPriceData] = useState<{ date: string; raw: number }[]>([]);
   const [priceLoading, setPriceLoading] = useState(true);
+  const [viewingPhotos, setViewingPhotos] = useState<string[] | null>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -279,6 +280,19 @@ export default function CardDetail({ card }: { card: any }) {
           </div>
         </div>
       </div>
+
+      {/* Photo Modal */}
+      {viewingPhotos && (
+        <div onClick={() => setViewingPhotos(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px' }}>
+          {viewingPhotos.map((src, i) => (
+            <div key={i} style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '11px', color: '#888', marginBottom: '8px', fontWeight: '700', letterSpacing: '1px' }}>{i === 0 ? 'VOORKANT' : 'ACHTERKANT'}</div>
+              <img src={src} style={{ maxHeight: '70vh', maxWidth: '40vw', borderRadius: '12px', objectFit: 'contain' }} alt='' />
+            </div>
+          ))}
+          <button onClick={() => setViewingPhotos(null)} style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: '1px solid #555', borderRadius: '50%', width: '36px', height: '36px', color: '#fff', fontSize: '18px', cursor: 'pointer' }}>×</button>
+        </div>
+      )}
     </div>
   );
 }
