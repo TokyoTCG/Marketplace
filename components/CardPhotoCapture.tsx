@@ -89,6 +89,9 @@ export default function CardPhotoCapture({ onPhotosReady }: Props) {
             <div style={{ fontSize: '13px', fontWeight: '700' }}>Uploaden</div>
           </button>
         </div>
+        <div style={{ fontSize: '10px', color: '#555', textAlign: 'center', marginTop: '10px' }}>
+          Geüploade foto's worden ter verificatie naar TokyoTCG gestuurd
+        </div>
       </div>
     )
   }
