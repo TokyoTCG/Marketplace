@@ -4,10 +4,9 @@ import { useRouter } from 'next/navigation'
 
 export default function Welcome() {
   const router = useRouter()
-  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setLoaded(true), 100)
+    setTimeout(() => {}, 100)
   }, [])
 
   return (
@@ -21,7 +20,6 @@ export default function Welcome() {
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
-
         @keyframes slideInRight {
           from { opacity: 0; transform: translateX(80px) rotate(5deg); }
           to { opacity: 1; transform: translateX(0) rotate(5deg); }
@@ -54,6 +52,18 @@ export default function Welcome() {
                      bobRight 4.5s ease-in-out 1.4s infinite;
           z-index: 2;
         }
+        @media (max-width: 767px) {
+          .clefairy {
+            width: 150px;
+            right: 8px;
+            top: auto;
+            bottom: 140px;
+            transform: rotate(5deg) !important;
+            animation: slideInRight 1s cubic-bezier(0.22,1,0.36,1) 0.4s forwards !important;
+            opacity: 0;
+            z-index: 1;
+          }
+        }
         .clefairy-glow {
           position: absolute;
           right: 3%;
@@ -78,7 +88,7 @@ export default function Welcome() {
         }
         .title {
           font-family: 'Space Mono', monospace;
-          font-size: clamp(26px, 3.6vw, 56px);
+          font-size: clamp(22px, 3.6vw, 56px);
           font-weight: 700;
           color: #ffffff;
           line-height: 1.15;
@@ -88,11 +98,10 @@ export default function Welcome() {
         }
         .subtitle {
           font-family: 'Space Mono', monospace;
-          font-size: clamp(12px, 1.2vw, 15px);
+          font-size: clamp(11px, 1.2vw, 15px);
           color: #888;
           animation: fadeUp 0.8s ease 1s both;
           margin-bottom: 48px;
-          letter-spacing: 0px;
           line-height: 1.7;
           max-width: 480px;
         }
@@ -139,13 +148,52 @@ export default function Welcome() {
           filter: blur(80px);
           pointer-events: none;
         }
+        .content {
+          position: relative;
+          z-index: 10;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          min-height: calc(100vh - 64px);
+          padding: 0 6% 0 7%;
+          max-width: 55%;
+        }
+        .btn-group {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        @media (max-width: 767px) {
+          .content {
+            max-width: 65%;
+            padding: 40px 0 0 24px;
+            justify-content: center;
+            min-height: 70vh;
+          }
+          .subtitle {
+            margin-bottom: 28px;
+            font-size: 11px;
+          }
+          .title {
+            font-size: 20px;
+          }
+          .btn-group {
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 180px;
+          }
+          .btn {
+            padding: 12px 20px;
+            font-size: 13px;
+            text-align: center;
+          }
+        }
       `}</style>
 
-      {/* Glow orbs */}
       <div className="glow-orb" style={{ width: 500, height: 500, backgroundColor: 'rgba(166,122,191,0.08)', top: '0%', left: '-5%', zIndex: 0 }} />
       <div className="glow-orb" style={{ width: 300, height: 300, backgroundColor: 'rgba(100,60,180,0.08)', bottom: '10%', left: '30%', zIndex: 0 }} />
 
-      {/* Stars */}
       {[
         { top: '20%', left: '8%',  size: '16px', color: '#e0c8ff', delay: '0s',   dur: '2.2s' },
         { top: '35%', left: '22%', size: '12px', color: '#ffffff', delay: '0.7s', dur: '1.8s' },
@@ -155,35 +203,19 @@ export default function Welcome() {
         { top: '80%', left: '55%', size: '14px', color: '#c9a0f5', delay: '0.5s', dur: '1.9s' },
         { top: '25%', right: '38%',size: '10px', color: '#e0c8ff', delay: '0.8s', dur: '2.3s' },
       ].map((s, i) => (
-        <div key={i} className="star" style={{ top: s.top, left: s.left, 
-right: s.right, bottom: (s as any).bottom, '--size': s.size, '--color': 
-s.color, 
-'--delay': s.delay, '--dur': s.dur } as React.CSSProperties}>✦</div>
+        <div key={i} className="star" style={{ top: s.top, left: s.left, right: s.right, '--size': s.size, '--color': s.color, '--delay': s.delay, '--dur': s.dur } as React.CSSProperties}>✦</div>
       ))}
 
-      {/* Clefairy glow */}
       <div className="clefairy-glow" />
-
-      {/* Clefairy */}
       <img
         className="clefairy"
         src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png"
         alt="Clefairy"
       />
 
-      {/* Left content */}
-      <div style={{
-        position: 'relative',
-        zIndex: 10,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        minHeight: 'calc(100vh - 64px)',
-        padding: '0 6% 0 7%',
-        maxWidth: '55%',
-      }}>
+      <div className="content">
         <img src="/logo.png" alt="Tokyo TCG" style={{
-          height: '70px',
+          height: '60px',
           width: 'auto',
           marginBottom: '28px',
           animation: 'fadeUp 0.8s ease 0.5s both',
@@ -196,13 +228,9 @@ s.color,
 
         <div className="wat-label">Wat wil je doen?</div>
 
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <button className="btn btn-primary" onClick={() => router.push('/choose')}>
-            Kopen
-          </button>
-          <button className="btn btn-secondary" onClick={() => router.push('/sell-choose')}>
-            Verkopen
-          </button>
+        <div className="btn-group">
+          <button className="btn btn-primary" onClick={() => router.push('/choose')}>Kopen</button>
+          <button className="btn btn-secondary" onClick={() => router.push('/sell-choose')}>Verkopen</button>
         </div>
       </div>
     </div>

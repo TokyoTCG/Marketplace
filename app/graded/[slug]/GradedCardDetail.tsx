@@ -24,6 +24,7 @@ export default function GradedCardDetail({ card }: { card: any }) {
   const [activeGrade, setActiveGrade] = useState('All');
   const [hovered, setHovered] = useState<number | null>(null);
   const [listings, setListings] = useState<any[]>([]);
+  const [lowestAsk, setLowestAsk] = useState<number | null>(null);
   const [priceData, setPriceData] = useState<{ date: string; raw: number }[]>([]);
   const [priceLoading, setPriceLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -39,17 +40,18 @@ export default function GradedCardDetail({ card }: { card: any }) {
   useEffect(() => {
     fetch('/api/listings?cardSlug=' + card.slug + '&graded=true')
       .then(r => r.json())
-      .then(d => setListings(d.listings || []))
+      .then(d => { console.log('PSA listings:', d); setListings(d.listings || []) })
       .catch(() => setListings([]));
   }, [card.slug]);
 
   useEffect(() => {
     setPriceLoading(true);
     const gradeParam = activeGrade !== 'All' ? `&grade=${encodeURIComponent(activeGrade)}` : '';
-    fetch(`/api/ebay/sold-prices?card=${encodeURIComponent(card.name)}&set=${encodeURIComponent(card.set)}&slug=${card.slug}-graded&graded=true${gradeParam}`)
+    fetch(`/api/ebay/sold-prices?card=${encodeURIComponent(card.name)}&set=${encodeURIComponent(card.set)}&number=${encodeURIComponent(card.number || '')}&slug=${card.slug}-graded&graded=true${gradeParam}`)
       .then(r => r.json())
       .then(d => {
         const prices = d.prices || [];
+        setLowestAsk(d.lowestAsk ?? null);
         if (prices.length === 0) { setPriceData([]); setPriceLoading(false); return; }
         const grouped: Record<string, number[]> = {};
         prices.forEach((p: any) => {
@@ -240,7 +242,10 @@ export default function GradedCardDetail({ card }: { card: any }) {
               <div style={{ background: '#1f1f21', border: '1px solid #2e2e31', borderRadius: 12, padding: '16px 18px', marginBottom: 20 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
                   <div style={{ fontSize: 13, fontWeight: 700 }}>Prijsontwikkeling</div>
-                  <div style={{ fontSize: 11, color: '#666' }}>{activeGrade === 'All' ? 'Alle PSA grades · eBay' : `${activeGrade} · eBay`} · 12 maanden</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ fontSize: 11, color: "#666" }}>{activeGrade === "All" ? "Alle PSA grades · eBay" : `${activeGrade} · eBay`} · 12 maanden</div>
+                    {lowestAsk !== null && <div style={{ fontSize: 11, color: "#a67abf", fontWeight: 700 }}>Marktprijs: €{lowestAsk.toFixed(2)}</div>}
+                  </div>
                 </div>
                 {priceLoading ? (
                   <div style={{ height: 130, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', fontSize: 12 }}>Prijzen laden...</div>

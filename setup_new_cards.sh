@@ -1,127 +1,14 @@
-export const cardData = [
+#!/bin/bash
+# Run from your project root:
+#   bash setup_new_cards.sh
+#
+# Adjust these paths if needed:
+CARDFILE="lib/cardData.ts"
+PAGEFILE="app/browse/page.tsx"
 
-  // ── NULLIFYING ZERO ──
-  { slug: 'aurorus-nullifying-zero', name: 'Aurorus', nameJP: 'アマルルガ', nameRoman: 'Amaruruga', set: 'Nullifying Zero', number: '084/080 AR', hp: '', type: 'Water', stage: 'Stage 2', image: '/cards/c3psjekgn275.webp' },
-  { slug: 'clefairy-nullifying-zero', name: 'Clefairy', nameJP: 'ピッピ', nameRoman: 'Pippi', set: 'Nullifying Zero', number: '086/080 AR', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/8yf49u85otbp.webp' },
-  { slug: 'dedenne-nullifying-zero', name: 'Dedenne', nameJP: 'デデンネ', nameRoman: 'Dedenne', set: 'Nullifying Zero', number: '085/080 AR', hp: '', type: 'Lightning', stage: 'Basic', image: '/cards/3ofrokld5ym3.webp' },
-  { slug: 'doublade-nullifying-zero', name: 'Doublade', nameJP: 'ニダンギル', nameRoman: 'Nidangiru', set: 'Nullifying Zero', number: '091/080 AR', hp: '', type: 'Metal', stage: 'Stage 1', image: '/cards/0f36mg75vgyb.webp' },
-  { slug: 'drapion-nullifying-zero', name: 'Drapion', nameJP: 'ドラピオン', nameRoman: 'Dorapion', set: 'Nullifying Zero', number: '090/080 AR', hp: '', type: 'Darkness', stage: 'Stage 1', image: '/cards/ajx5rnxf5k9z.webp' },
-  { slug: 'espurr-nullifying-zero', name: 'Espurr', nameJP: 'ニャスパー', nameRoman: 'Nyasper', set: 'Nullifying Zero', number: '087/080 AR', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/59bb9j6lwci1.webp' },
-  { slug: 'jacinthe-nullifying-zero', name: 'Jacinthe', nameJP: 'ユカリ', nameRoman: 'Yukari', set: 'Nullifying Zero', number: '116/080 SAR', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/0pd3sg03816z.webp' },
-  { slug: 'mega-clefable-ex-nullifying-zero', name: 'Mega Clefable EX', nameJP: 'メガクレッフィex', nameRoman: 'Mega Clefable EX', set: 'Nullifying Zero', number: '112/080 SAR', hp: '', type: 'Psychic', stage: 'Mega Evolution', image: '/cards/3woiuf5fw2in.webp' },
-  { slug: 'mega-starmie-ex-nullifying-zero', name: 'Mega Starmie EX', nameJP: 'メガスターミーex', nameRoman: 'Mega Starmie EX', set: 'Nullifying Zero', number: '111/080 SAR', hp: '', type: 'Water', stage: 'Mega Evolution', image: '/cards/iyttbwv7xmny.webp' },
-  { slug: 'mega-zygarde-ex-nullifying-zero', name: 'Mega Zygarde EX', nameJP: 'メガジガルデex', nameRoman: 'Mega Zygarde EX', set: 'Nullifying Zero', number: '113/080 SAR', hp: '', type: 'Fighting', stage: 'Mega Evolution', image: '/cards/r3dqaot3olgc.webp' },
-  { slug: 'meowth-ex-nullifying-zero', name: 'Meowth EX', nameJP: 'ニャースex', nameRoman: 'Nyarth EX', set: 'Nullifying Zero', number: '114/080 SAR', hp: '', type: 'Colorless', stage: 'Basic', image: '/cards/bpg3bqkytt8m.webp' },
-  { slug: 'probopass-nullifying-zero', name: 'Probopass', nameJP: 'ダイノーズ', nameRoman: 'Dainoze', set: 'Nullifying Zero', number: '088/080 AR', hp: '', type: 'Metal', stage: 'Stage 1', image: '/cards/rrz3qyqvpb51.webp' },
-  { slug: 'raticate-nullifying-zero', name: 'Raticate', nameJP: 'ラッタ', nameRoman: 'Ratta', set: 'Nullifying Zero', number: '092/080 AR', hp: '', type: 'Colorless', stage: 'Stage 1', image: '/cards/m6dzqlmm0w10.webp' },
-  { slug: 'rosas-encouragement-nullifying-zero', name: "Rosa's Encouragement", nameJP: 'メイのはげまし', nameRoman: 'Mei no Hagemashi', set: 'Nullifying Zero', number: '115/080 SAR', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/n80s4svqk9kb.webp' },
-  { slug: 'rowlet-nullifying-zero', name: 'Rowlet', nameJP: 'モクロー', nameRoman: 'Mokuro', set: 'Nullifying Zero', number: '082/080 AR', hp: '', type: 'Grass', stage: 'Basic', image: '/cards/7g35ghh7rakc.webp' },
-  { slug: 'spewpa-nullifying-zero', name: 'Spewpa', nameJP: 'コフーライ', nameRoman: 'Kofurai', set: 'Nullifying Zero', number: '081/080 AR', hp: '', type: 'Grass', stage: 'Stage 1', image: '/cards/w6ug6v7y5zam.webp' },
-  { slug: 'talonflame-nullifying-zero', name: 'Talonflame', nameJP: 'ファイアロー', nameRoman: 'Faiero', set: 'Nullifying Zero', number: '083/080 AR', hp: '', type: 'Fire', stage: 'Stage 2', image: '/cards/ju227o4h69by.webp' },
-  { slug: 'tyrunt-nullifying-zero', name: 'Tyrunt', nameJP: 'チゴラス', nameRoman: 'Chigoras', set: 'Nullifying Zero', number: '089/080 AR', hp: '', type: 'Fighting', stage: 'Basic', image: '/cards/94niwj0v1uvf.webp' },
-
-  // ── MEGA DREAM EX ──
-  { slug: 'beautifly-mega-dream-ex', name: 'Beautifly', nameJP: 'アゲハント', nameRoman: 'Agehanto', set: 'Mega Dream EX', number: '194/193 AR', hp: '', type: 'Grass', stage: 'Stage 2', image: '/cards/ek5n57ep8k0l.webp' },
-  { slug: 'budew-mega-dream-ex', name: 'Budew', nameJP: 'スボミー', nameRoman: 'Subomie', set: 'Mega Dream EX', number: '196/193 AR', hp: '', type: 'Grass', stage: 'Basic', image: '/cards/l4g7qw3lqm7i.webp' },
-  { slug: 'canari-mega-dream-ex', name: 'Canari', nameJP: 'カナリ', nameRoman: 'Kanari', set: 'Mega Dream EX', number: '248/193 SAR', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/xpd4ocw0i8pu.webp' },
-  { slug: 'cynthias-spiritomb-mega-dream-ex', name: "Cynthia's Spiritomb", nameJP: 'シロナのミカルゲ', nameRoman: 'Shirona no Mikaruge', set: 'Mega Dream EX', number: '208/193 AR', hp: '', type: 'Darkness', stage: 'Basic', image: '/cards/wsbsqpglq2d4.webp' },
-  { slug: 'drakloak-mega-dream-ex', name: 'Drakloak', nameJP: 'ドロンチ', nameRoman: 'Doronchi', set: 'Mega Dream EX', number: '212/193 AR', hp: '', type: 'Dragon', stage: 'Stage 1', image: '/cards/w13rpillcsjg.webp' },
-  { slug: 'dreepy-mega-dream-ex', name: 'Dreepy', nameJP: 'ドラメシヤ', nameRoman: 'Dorameshiya', set: 'Mega Dream EX', number: '211/193 AR', hp: '', type: 'Dragon', stage: 'Basic', image: '/cards/ec41mb04e9o3.webp' },
-  { slug: 'dustox-mega-dream-ex', name: 'Dustox', nameJP: 'ドクケイル', nameRoman: 'Dokukeiru', set: 'Mega Dream EX', number: '195/193 AR', hp: '', type: 'Grass', stage: 'Stage 2', image: '/cards/3d3q6ea2vt7n.webp' },
-  { slug: 'ethans-magcargo-mega-dream-ex', name: "Ethan's Magcargo", nameJP: 'ヒビキのマグカルゴ', nameRoman: 'Hibiki no Magcargo', set: 'Mega Dream EX', number: '197/193 AR', hp: '', type: 'Fire', stage: 'Stage 1', image: '/cards/csd4xi1pddwo.webp' },
-  { slug: 'fan-rotom-mega-dream-ex', name: 'Fan Rotom', nameJP: 'ファンロトム', nameRoman: 'Fan Rotom', set: 'Mega Dream EX', number: '213/193 AR', hp: '', type: 'Lightning', stage: 'Basic', image: '/cards/cg0nmz6ja3b7.webp' },
-  { slug: 'fezandipiti-ex-mega-dream-ex', name: 'Fezandipiti EX', nameJP: 'フェザーナex', nameRoman: 'Fezandipiti EX', set: 'Mega Dream EX', number: '244/193 SAR', hp: '', type: 'Darkness', stage: 'Basic', image: '/cards/vwek4xxlwnkh.webp' },
-  { slug: 'galarian-obstagoon-mega-dream-ex', name: 'Galarian Obstagoon', nameJP: 'ガラルタチフサグマ', nameRoman: 'Galarian Tachifusaguma', set: 'Mega Dream EX', number: '209/193 AR', hp: '', type: 'Darkness', stage: 'Stage 2', image: '/cards/zb1uds8xmgqm.webp' },
-  { slug: 'heliolisk-mega-dream-ex', name: 'Heliolisk', nameJP: 'エレザード', nameRoman: 'Erezard', set: 'Mega Dream EX', number: '201/193 AR', hp: '', type: 'Lightning', stage: 'Stage 1', image: '/cards/jelsojlgjddo.webp' },
-  { slug: 'hops-trevenant-mega-dream-ex', name: "Hop's Trevenant", nameJP: 'ホップのオーロット', nameRoman: 'Hoppu no Orot', set: 'Mega Dream EX', number: '204/193 AR', hp: '', type: 'Grass', stage: 'Stage 1', image: '/cards/izqqdv6hkbxc.webp' },
-  { slug: 'ionos-bellibolt-ex-mega-dream-ex', name: "Iono's Bellibolt EX", nameJP: 'ナンジャモのハカドッグex', nameRoman: "Nanjamo no Bellibolt ex", set: 'Mega Dream EX', number: '236/193 SAR', hp: '', type: 'Lightning', stage: 'Basic', image: '/cards/xu11pf3jnwdo.webp' },
-  { slug: 'iriss-fighting-spirit-mega-dream-ex', name: "Iris's Fighting Spirit", nameJP: 'アイリスの闘志', nameRoman: 'Airisu no Toshi', set: 'Mega Dream EX', number: '247/193 SAR', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/zl5sigyhvrlu.webp' },
-  { slug: 'marnies-grimmsnarl-ex-mega-dream-ex', name: "Marnie's Grimmsnarl EX", nameJP: 'マリィのオーロンゲex', nameRoman: "Mary no Grimmsnarl ex", set: 'Mega Dream EX', number: '244/193 SAR', hp: '', type: 'Darkness', stage: 'Stage 2', image: '/cards/emlkc8k3rvbz.webp' },
-  { slug: 'medicham-mega-dream-ex', name: 'Medicham', nameJP: 'チャーレム', nameRoman: 'Charemu', set: 'Mega Dream EX', number: '207/193 AR', hp: '', type: 'Fighting', stage: 'Stage 1', image: '/cards/o6u0cxup4m67.webp' },
-  { slug: 'mega-diancie-ex-mega-dream-ex', name: 'Mega Diancie EX', nameJP: 'メガディアンシーex', nameRoman: 'Mega Diancie EX', set: 'Mega Dream EX', number: '227/193 MAR', hp: '', type: 'Fighting', stage: 'Mega Evolution', image: '/cards/je7542kdk91x.webp' },
-  { slug: 'mega-dragonite-ex-mega-dream-ex', name: 'Mega Dragonite EX', nameJP: 'メガカイリューex', nameRoman: 'Mega Dragonite EX', set: 'Mega Dream EX', number: '232/193 MAR', hp: '', type: 'Dragon', stage: 'Mega Evolution', image: '/cards/fod0ir1pa1dp.webp' },
-  { slug: 'mega-eelektross-ex-mega-dream-ex', name: 'Mega Eelektross EX', nameJP: 'メガシビルドンex', nameRoman: 'Mega Eelektross EX', set: 'Mega Dream EX', number: '225/193 MAR', hp: '', type: 'Lightning', stage: 'Mega Evolution', image: '/cards/thy5w6g94fs8.webp' },
-  { slug: 'mega-froslass-ex-mega-dream-ex', name: 'Mega Froslass EX', nameJP: 'メガユキメノコex', nameRoman: 'Mega Froslass EX', set: 'Mega Dream EX', number: '224/193 MAR', hp: '', type: 'Water', stage: 'Mega Evolution', image: '/cards/87c1g0ilsuvj.webp' },
-  { slug: 'mega-gengar-ex-mega-dream-ex', name: 'Mega Gengar EX', nameJP: 'メガゲンガーex', nameRoman: 'Mega Gengar EX', set: 'Mega Dream EX', number: '230/193 MAR', hp: '', type: 'Psychic', stage: 'Mega Evolution', image: '/cards/5nushys0a8f7.webp' },
-  { slug: 'mega-hawlucha-ex-mega-dream-ex', name: 'Mega Hawlucha EX', nameJP: 'メガルチャブルex', nameRoman: 'Mega Hawlucha EX', set: 'Mega Dream EX', number: '229/193 MAR', hp: '', type: 'Fighting', stage: 'Mega Evolution', image: '/cards/5nuyfisu68pw.webp' },
-  { slug: 'mega-scrafty-ex-mega-dream-ex', name: 'Mega Scrafty EX', nameJP: 'メガズルズキンex', nameRoman: 'Mega Scrafty EX', set: 'Mega Dream EX', number: '231/193 MAR', hp: '', type: 'Darkness', stage: 'Mega Evolution', image: '/cards/3twavi0nv2fa.webp' },
-  { slug: 'misdreavus-mega-dream-ex', name: 'Misdreavus', nameJP: 'ムウマ', nameRoman: 'Muma', set: 'Mega Dream EX', number: '202/193 AR', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/4hcx9o8nyutb.webp' },
-  { slug: 'ns-zekrom-mega-dream-ex', name: "N's Zekrom", nameJP: 'Nのゼクロム', nameRoman: "N no Zekrom", set: 'Mega Dream EX', number: '210/193 AR', hp: '', type: 'Dragon', stage: 'Basic', image: '/cards/5zkd7bh2rnne.webp' },
-  { slug: 'ns-zoroark-ex-mega-dream-ex', name: "N's Zoroark EX", nameJP: 'NのゾロアークEX', nameRoman: "N no Zoroark ex", set: 'Mega Dream EX', number: '242/193 SAR', hp: '', type: 'Darkness', stage: 'Stage 2', image: '/cards/0fro21l8y4co.webp' },
-  { slug: 'numel-mega-dream-ex', name: 'Numel', nameJP: 'ドンメル', nameRoman: 'Donmel', set: 'Mega Dream EX', number: '198/193 AR', hp: '', type: 'Fire', stage: 'Basic', image: '/cards/s1d04hkwxdpt.webp' },
-  { slug: 'pikachu-ex-mega-dream-ex', name: 'Pikachu EX', nameJP: 'ピカチュウex', nameRoman: 'Pikachu EX', set: 'Mega Dream EX', number: '234/193 SAR', hp: '', type: 'Lightning', stage: 'Basic', image: '/cards/x5dwdfd1atbb.webp' },
-  { slug: 'psyduck-mega-dream-ex', name: 'Psyduck', nameJP: 'コダック', nameRoman: 'Koduck', set: 'Mega Dream EX', number: '199/193 AR', hp: '', type: 'Water', stage: 'Basic', image: '/cards/z42bhc4s6h51.webp' },
-  { slug: 'snorunt-mega-dream-ex', name: 'Snorunt', nameJP: 'ユキワラシ', nameRoman: 'Yukiwarashi', set: 'Mega Dream EX', number: '200/193 AR', hp: '', type: 'Water', stage: 'Basic', image: '/cards/2j71j7hn1b6k.webp' },
-  { slug: 'stevens-metagross-ex-mega-dream-ex', name: "Steven's Metagross EX", nameJP: 'ダイゴのメタグロスex', nameRoman: "Daigo no Metagross ex", set: 'Mega Dream EX', number: '245/193 SAR', hp: '', type: 'Metal', stage: 'Stage 2', image: '/cards/ffgm3gli6ig8.webp' },
-  { slug: 'surfer-mega-dream-ex', name: 'Surfer', nameJP: 'サーファー', nameRoman: 'Surfer', set: 'Mega Dream EX', number: '249/193 SAR', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/w42hc11ptwv5.webp' },
-  { slug: 'team-rockets-dugtrio-mega-dream-ex', name: "Team Rocket's Dugtrio", nameJP: 'ロケット団のダグトリオ', nameRoman: "Rocket-dan no Dugtrio", set: 'Mega Dream EX', number: '206/193 AR', hp: '', type: 'Fighting', stage: 'Stage 1', image: '/cards/qp4s378xzwl9.webp' },
-  { slug: 'team-rockets-mewtwo-ex-mega-dream-ex', name: "Team Rocket's Mewtwo EX", nameJP: 'ロケット団のミュウツーex', nameRoman: "Rocket-dan no Mewtwo ex", set: 'Mega Dream EX', number: '237/193 SAR', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/adfvymcqnmhs.webp' },
-  { slug: 'team-rockets-mimikyu-mega-dream-ex', name: "Team Rocket's Mimikyu", nameJP: 'ロケット団のミミッキュ', nameRoman: "Rocket-dan no Mimikyu", set: 'Mega Dream EX', number: '205/193 AR', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/0wu6mspv3a1y.webp' },
-  { slug: 'togekiss-mega-dream-ex', name: 'Togekiss', nameJP: 'トゲキッス', nameRoman: 'Togekisu', set: 'Mega Dream EX', number: '203/193 AR', hp: '', type: 'Psychic', stage: 'Stage 2', image: '/cards/sdawjdqrw0ud.webp' },
-
-  // ── INFERNO X ──
-  { slug: 'charcadet-inferno-x', name: 'Charcadet', nameJP: 'カルボウ', nameRoman: 'Karbow', set: 'Inferno X', number: '083/080 AR', hp: '', type: 'Fire', stage: 'Basic', image: '/cards/smzd8bitufj6.webp' },
-  { slug: 'dewgong-inferno-x', name: 'Dewgong', nameJP: 'ジュゴン', nameRoman: 'Jugon', set: 'Inferno X', number: '084/080 AR', hp: '', type: 'Water', stage: 'Stage 1', image: '/cards/rmkdrcufkn2t.webp' },
-  { slug: 'ludicolo-inferno-x', name: 'Ludicolo', nameJP: 'ルンパッパ', nameRoman: 'Runpappa', set: 'Inferno X', number: '081/080 AR', hp: '', type: 'Water', stage: 'Stage 2', image: '/cards/bgycwe1wfxbj.webp' },
-  { slug: 'nymble-inferno-x', name: 'Nymble', nameJP: 'バチンキー', nameRoman: 'Bachinkii', set: 'Inferno X', number: '082/080 AR', hp: '', type: 'Grass', stage: 'Basic', image: '/cards/dofa7evgi98t.webp' },
-  { slug: 'piplup-inferno-x', name: 'Piplup', nameJP: 'ポッチャマ', nameRoman: 'Pochama', set: 'Inferno X', number: '085/080 AR', hp: '', type: 'Water', stage: 'Basic', image: '/cards/zhjuk0ykre3k.webp' },
-
-  // ── TOP 60 MOST VALUABLE (ACROSS SETS) ──
-  { slug: 'latias-and-latios-gx-tag-bolt', name: 'Latias & Latios-GX', nameJP: 'ラティアス&ラティオスGX', nameRoman: 'Latias & Latios-GX', set: 'Tag Bolt', number: '105/095', hp: '', type: 'Dragon', stage: 'Basic', image: '/cards/tcg_57bc6f52bddeff1b941a6f7a25f5da1cf365fde67a81d44ad8321d6984d57986.jpg' },
-  { slug: 'mega-charizard-x-ex-inferno-x-116', name: 'Mega Charizard X EX', nameJP: 'メガリザードンXex', nameRoman: 'Mega Charizard X EX', set: 'Inferno X', number: '116/080', hp: '', type: 'Fire', stage: 'Mega Evolution', image: '/cards/tcg_b3f1963205e72069b7ee890371ebf1a4804cebd504e9adbe76a02d9a62ca809c.webp' },
-  { slug: 'sightseer-tag-all-stars', name: 'Sightseer', nameJP: 'マオとスイレン', nameRoman: 'Sightseer', set: 'Tag All Stars', number: '192/173', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_c42c0d3d76dfb0a59c106b7a6b11c3fdeb1f3694d2cd56f8f7932f1b563444e8.jpg' },
-  { slug: 'giratina-v-lost-abyss', name: 'Giratina V', nameJP: 'ギラティナV', nameRoman: 'Giratina V', set: 'Lost Abyss', number: '111/100', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_ea212c05e47cd33e6352c73f17802ae39aa536cff2b8dc5236e91ef0719699f8.jpg' },
-  { slug: 'sylveon-vmax-eevee-heroes', name: 'Sylveon VMAX', nameJP: 'ニンフィアVMAX', nameRoman: 'Sylveon VMAX', set: 'Eevee Heroes', number: '093/069', hp: '', type: 'Psychic', stage: 'VMAX', image: '/cards/tcg_116f8e9f1b978d3172b1c0e6fe812b8c417bbccd9b3ee246d264d2f3cafca4e0.jpg' },
-  { slug: 'lusamine-gx-battle-boost', name: 'Lusamine', nameJP: 'ルザミーネ', nameRoman: 'Lusamine', set: 'GX Battle Boost', number: '120/114', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_f241db3e54b53f8359bc414227acabf59547630637f6aeca8ab7c0a48ec88fa4.jpg' },
-  { slug: 'mega-charizard-x-ex-inferno-x-110', name: 'Mega Charizard X EX', nameJP: 'メガリザードンXex', nameRoman: 'Mega Charizard X EX', set: 'Inferno X', number: '110/080', hp: '', type: 'Fire', stage: 'Mega Evolution', image: '/cards/tcg_86e3030de51e25a271d5a532f4975875d13ce2c3de6b0db60fe081d5a9fe5982.webp' },
-  { slug: 'greens-exploration-tag-all-stars', name: "Green's Exploration", nameJP: 'グリーンの探索', nameRoman: "Green's Exploration", set: 'Tag All Stars', number: '196/173', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_aee2a12a05d813bceaf59b6cde571bca1ce1c46927f1be5a598b88a87b98e2c7.jpg' },
-  { slug: 'lugia-v-paradigm-trigger', name: 'Lugia V', nameJP: 'ルギアV', nameRoman: 'Lugia V', set: 'Paradigm Trigger', number: '110/098', hp: '', type: 'Colorless', stage: 'Basic', image: '/cards/tcg_2af2c4fd876d5984401612c5a780e8f9047c824a90ac384d359a44f7066aa8a0.jpg' },
-  { slug: 'rayquaza-v-blue-sky-stream', name: 'Rayquaza V', nameJP: 'レックウザV', nameRoman: 'Rayquaza V', set: 'Blue Sky Stream', number: '076/067', hp: '', type: 'Dragon', stage: 'Basic', image: '/cards/tcg_125e3c407131ed8ec06cafb9ab63cb79c7b661ee97debaa9305f07ba2ac53b25.jpg' },
-  { slug: 'mewtwo-and-mew-gx-miracle-twin', name: 'Mewtwo & Mew-GX', nameJP: 'ミュウツー&ミュウGX', nameRoman: 'Mewtwo & Mew-GX', set: 'Miracle Twin', number: '098/094', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_72ab62b1be66d8446b50087328a68e3d8baa977719c61348c3b07477fb928a31.jpg' },
-  { slug: 'gardevoir-and-sylveon-gx-night-unison', name: 'Gardevoir & Sylveon-GX', nameJP: 'サーナイト&ニンフィアGX', nameRoman: 'Gardevoir & Sylveon-GX', set: 'Night Unison', number: '061/055', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_cf715c07d48607a9f08ebae8064c37f475ddde944ecb39866e1e0046e6e8b3b8.jpg' },
-  { slug: 'mega-lucario-ex-mega-brave', name: 'Mega Lucario EX', nameJP: 'メガルカリオex', nameRoman: 'Mega Lucario EX', set: 'Mega Brave', number: '092/063', hp: '', type: 'Fighting', stage: 'Mega Evolution', image: '/cards/tcg_b5f860f2965e28b12172c9ea609ccdb4a305aa3e7377d60a5415c4abf0fe8d27.webp' },
-  { slug: 'mewtwo-gx-shining-legends', name: 'Mewtwo-GX', nameJP: 'ミュウツーGX', nameRoman: 'Mewtwo-GX', set: 'Shining Legends', number: '082/072', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_a58189b6cae7dbf4ca233b0387af957a0d73621735697f7485f45948bbe9c091.jpg' },
-  { slug: 'mega-gardevoir-ex-mega-symphonia', name: 'Mega Gardevoir EX', nameJP: 'メガサーナイトex', nameRoman: 'Mega Gardevoir EX', set: 'Mega Symphonia', number: '092/063', hp: '', type: 'Psychic', stage: 'Mega Evolution', image: '/cards/tcg_b65c969dbbe65386e68cae60e3319ec6c8e314675477a14019809854dc4777c9.webp' },
-  { slug: 'misty-and-lorelei-tag-all-stars', name: 'Misty & Lorelei', nameJP: 'カスミ&カンナ', nameRoman: 'Misty & Lorelei', set: 'Tag All Stars', number: '191/173', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_c31ef14f8b6868f5fa49808ef1b74542255881cf6480e560a3cfbc270f3de5dc.jpg' },
-  { slug: 'marnie-shield', name: 'Marnie', nameJP: 'マリィ', nameRoman: 'Marnie', set: 'Shield', number: '068/060', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_fb54e710342d64011815e0fdc0149b1599380c645f7db61b2f1ef76f2353b02a.jpg' },
-  { slug: 'dragonite-v-blue-sky-stream', name: 'Dragonite V', nameJP: 'カイリューV', nameRoman: 'Dragonite V', set: 'Blue Sky Stream', number: '074/067', hp: '', type: 'Dragon', stage: 'Basic', image: '/cards/tcg_1d647c0f0acfb2536b7ddb45f78e6c7a8d179905a74cd109f9df12366eed83c9.jpg' },
-  { slug: 'mew-ex-shiny-treasure-ex', name: 'Mew EX', nameJP: 'ミュウex', nameRoman: 'Mew EX', set: 'Shiny Treasure EX', number: '347/190', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_e82e8fea1eb69e6b588809916b174550eeb9d46c91a0f3bff5dc54a4c2d54cfb.webp' },
-  { slug: 'mega-gengar-ex-mega-dream-ex-240', name: 'Mega Gengar EX', nameJP: 'メガゲンガーex', nameRoman: 'Mega Gengar EX', set: 'Mega Dream EX', number: '240/193', hp: '', type: 'Psychic', stage: 'Mega Evolution', image: '/cards/tcg_467de36765ad0429330daede1b2f780e7b4e93f573d5cda2ef5b44d9dd31270c.webp' },
-  { slug: 'leafeon-vmax-eevee-heroes', name: 'Leafeon VMAX', nameJP: 'リーフィアVMAX', nameRoman: 'Leafeon VMAX', set: 'Eevee Heroes', number: '089/069', hp: '', type: 'Grass', stage: 'VMAX', image: '/cards/tcg_89ea8c01ab44ef85a62a4e7105c8cf0d1644f947005851872ccc2834d3442718.jpg' },
-  { slug: 'umbreon-ex-terastal-festival-ex', name: 'Umbreon EX', nameJP: 'ブラッキーex', nameRoman: 'Umbreon EX', set: 'Terastal Festival EX', number: '217/187', hp: '', type: 'Darkness', stage: 'Basic', image: '/cards/tcg_4732677dbb725379ccc778f1cd4a69beaa1d13dc44bc0992ef20d142f9f9f768.webp' },
-  { slug: 'moltres-zapdos-articuno-gx-sky-legend', name: 'Moltres & Zapdos & Articuno-GX', nameJP: 'ファイヤー&サンダー&フリーザーGX', nameRoman: 'Moltres & Zapdos & Articuno-GX', set: 'Sky Legend', number: '060/054', hp: '', type: 'Water', stage: 'Basic', image: '/cards/tcg_1e8ea75787cf07cb900938eb154ea6faa5a5e4ff34461d28e2b3d77646ac52d2.jpg' },
-  { slug: 'blastoise-and-piplup-gx-remix-bout', name: 'Blastoise & Piplup-GX', nameJP: 'カメックス&ポッチャマGX', nameRoman: 'Blastoise & Piplup-GX', set: 'Remix Bout', number: '070/064', hp: '', type: 'Water', stage: 'Basic', image: '/cards/tcg_e4c9f5e1dfcba80332de901121e2bbb30d8beb608649253b1f1476886cace2c6.jpg' },
-  { slug: 'mew-vmax-fusion-arts', name: 'Mew VMAX', nameJP: 'ミュウVMAX', nameRoman: 'Mew VMAX', set: 'Fusion Arts', number: '119/100', hp: '', type: 'Psychic', stage: 'VMAX', image: '/cards/tcg_2d5ade7ea4032b25a84e2d08a938d8f2af02c9569e6e3ef35df5d8af195577d4.jpg' },
-  { slug: 'umbreon-and-darkrai-gx-tag-all-stars', name: 'Umbreon & Darkrai-GX', nameJP: 'ブラッキー&ダークライGX', nameRoman: 'Umbreon & Darkrai-GX', set: 'Tag All Stars', number: '182/173', hp: '', type: 'Darkness', stage: 'Basic', image: '/cards/tcg_9b6a1d8b49a73128dfbaf7e6c73c764a69214c423ad98b0e51fb839d33197fef.jpg' },
-  { slug: 'umbreon-gx-collection-moon', name: 'Umbreon-GX', nameJP: 'ブラッキーGX', nameRoman: 'Umbreon-GX', set: 'Collection Moon', number: '069/060', hp: '', type: 'Darkness', stage: 'Stage 1', image: '/cards/tcg_1b363bf623d51708afb7c9b155f5dd9a3fd1717a57aff64989de0efc931e4c00.jpg' },
-  { slug: 'iono-clay-burst', name: 'Iono', nameJP: 'ナンジャモ', nameRoman: 'Iono', set: 'Clay Burst', number: '096/071', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_3d1de5f306aee75d1ea67dfa26885cc9d69fcaf5b5035036fd84a356bf4996f2.webp' },
-  { slug: 'team-rockets-mewtwo-ex-glory-of-team-rocket', name: "Team Rocket's Mewtwo ex", nameJP: 'ロケット団のミュウツーex', nameRoman: "Team Rocket's Mewtwo ex", set: 'The Glory of Team Rocket', number: '125/098', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_46edb1d4f7784e31ef7ac579cc56cf55685c4f8817121b5277ee36d55117db5c.webp' },
-  { slug: 'rosa-dream-league', name: 'Rosa', nameJP: 'メイ', nameRoman: 'Rosa', set: 'Dream League', number: '067/049', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_27f7a754878a6c9c99794c50fafe2bd95756307c42a871c57b0bf14967dc67b3.jpg' },
-  { slug: 'solgaleo-and-lunala-gx-dream-league', name: 'Solgaleo & Lunala-GX', nameJP: 'ソルガレオ&ルナアーラGX', nameRoman: 'Solgaleo & Lunala-GX', set: 'Dream League', number: '063/049', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_3a34e29438f49c4f6b0e6d28f6efc7751d26efe73bea1ba46ddc565a0f63ff4a.jpg' },
-  { slug: 'charizard-ex-pokemon-card-151', name: 'Charizard EX', nameJP: 'リザードンex', nameRoman: 'Charizard EX', set: 'Pokémon Card 151', number: '201/165', hp: '', type: 'Fire', stage: 'Stage 2', image: '/cards/tcg_51b761e15e243b915bfcf6bd443b572a4c3c5fa0b0f2d8836677365d10c64b69.webp' },
-  { slug: 'gengar-and-mimikyu-gx-tag-bolt-102', name: 'Gengar & Mimikyu-GX', nameJP: 'ゲンガー&ミミッキュGX', nameRoman: 'Gengar & Mimikyu-GX', set: 'Tag Bolt', number: '102/095', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_0920da9090b41b1f27bce5571977f05c3ecef8c1712cd100fb770ca52f7dedce.jpg' },
-  { slug: 'reshiram-and-charizard-gx-double-blaze', name: 'Reshiram & Charizard-GX', nameJP: 'レシラム&リザードンGX', nameRoman: 'Reshiram & Charizard-GX', set: 'Double Blaze', number: '097/095', hp: '', type: 'Fire', stage: 'Basic', image: '/cards/tcg_4c824f8386617888ebabb56cb8f73e142d404077974b331ad0de8f32557ee320.jpg' },
-  { slug: 'shadow-rider-calyrex-vmax-jet-black-spirit', name: 'Shadow Rider Calyrex VMAX', nameJP: 'はくばバドレックスVMAX', nameRoman: 'Shadow Rider Calyrex VMAX', set: 'Jet-Black Spirit', number: '086/070', hp: '', type: 'Psychic', stage: 'VMAX', image: '/cards/tcg_38d94f5da2d7ba6a52a70e592513a17ff2822f280bd24b6a55b60d62da007c3b.jpg' },
-  { slug: 'zekrom-ex-black-bolt', name: 'Zekrom EX', nameJP: 'ゼクロムex', nameRoman: 'Zekrom EX', set: 'Black Bolt', number: '174/086', hp: '', type: 'Lightning', stage: 'Basic', image: '/cards/tcg_bab4933314af9efd0cea81d0b62450d5b8afc6dcde53cb0edb14d41654274e3d.webp' },
-  { slug: 'mega-zygarde-ex-nullifying-zero-117', name: 'Mega Zygarde EX', nameJP: 'メガジガルデex', nameRoman: 'Mega Zygarde EX', set: 'Nullifying Zero', number: '117/080', hp: '', type: 'Fighting', stage: 'Mega Evolution', image: '/cards/tcg_08ad8d835d82c44cbab5f02d32d37e377fc03e06c787d51da959d8790190530d.webp' },
-  { slug: 'charizard-gx-to-have-seen-the-battle-rainbow', name: 'Charizard-GX', nameJP: 'リザードンGX', nameRoman: 'Charizard-GX', set: 'To Have Seen the Battle Rainbow', number: '052/051', hp: '', type: 'Fire', stage: 'Stage 2', image: '/cards/tcg_10336fce55ff171908d5d9cf4efc585cdc6d55342120364b1cc86b3af1f8a38a.jpg' },
-  { slug: 'raichu-and-alolan-raichu-gx-gg-end', name: 'Raichu & Alolan Raichu-GX', nameJP: 'ライチュウ&アローラライチュウGX', nameRoman: 'Raichu & Alolan Raichu-GX', set: 'GG End', number: '057/054', hp: '', type: 'Lightning', stage: 'Basic', image: '/cards/tcg_334df88fdf539ca70b4f1805c43921bec0747352e3ba9f77226882da17e1d103.jpg' },
-  { slug: 'umbreon-v-eevee-heroes', name: 'Umbreon V', nameJP: 'ブラッキーV', nameRoman: 'Umbreon V', set: 'Eevee Heroes', number: '085/069', hp: '', type: 'Darkness', stage: 'Basic', image: '/cards/tcg_27b540b74477b6d90331136e1a821cd2defee8b841df1bc8d3cf31473020ab8d.jpg' },
-  { slug: 'mega-dragonite-ex-mega-dream-ex-250', name: 'Mega Dragonite EX', nameJP: 'メガカイリューex', nameRoman: 'Mega Dragonite EX', set: 'Mega Dream EX', number: '250/193', hp: '', type: 'Dragon', stage: 'Mega Evolution', image: '/cards/tcg_94f1e106523e41fddad93b483e5fec6c1b590359b43c2220ff54f78172b21240.webp' },
-  { slug: 'reshiram-ex-white-flare', name: 'Reshiram EX', nameJP: 'レシラムex', nameRoman: 'Reshiram EX', set: 'White Flare', number: '174/086', hp: '', type: 'Fire', stage: 'Basic', image: '/cards/tcg_084f115b76b3c45b7ca9b0276e17653088d26004ceb605df9c67e9235834619c.webp' },
-  { slug: 'umbreon-gx-gx-ultra-shiny', name: 'Umbreon-GX', nameJP: 'ブラッキーGX', nameRoman: 'Umbreon-GX', set: 'GX Ultra Shiny', number: '229/150', hp: '', type: 'Darkness', stage: 'Stage 1', image: '/cards/tcg_aedd79bfd10b2f54c1d5ce55537d4e3bc38363e3067e602420da0c626a4181cb.jpg' },
-  { slug: 'reshiram-and-charizard-gx-tag-all-stars', name: 'Reshiram & Charizard-GX', nameJP: 'レシラム&リザードンGX', nameRoman: 'Reshiram & Charizard-GX', set: 'Tag All Stars', number: '220/173', hp: '', type: 'Fire', stage: 'Basic', image: '/cards/tcg_e941cbf875d566939e17d315b9c2301e8422ba7363e23efac9ed9ac483c7e0c6.jpg' },
-  { slug: 'gengar-and-mimikyu-gx-tag-bolt-113', name: 'Gengar & Mimikyu-GX', nameJP: 'ゲンガー&ミミッキュGX', nameRoman: 'Gengar & Mimikyu-GX', set: 'Tag Bolt', number: '113/095', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_c213b0564a64aa9a187a0f6f732c13889148c908b659bf24d182297491b3352c.jpg' },
-  { slug: 'galarian-moltres-v-matchless-fighters', name: 'Galarian Moltres V', nameJP: 'ガラルファイヤーV', nameRoman: 'Galarian Moltres V', set: 'Matchless Fighters', number: '078/070', hp: '', type: 'Darkness', stage: 'Basic', image: '/cards/tcg_27474c39f724fce56cb3d1c5ce628a363e6f39d4753ec3bb7918d4b84ba06ca4.jpg' },
-  { slug: 'togepi-cleffa-igglybuff-gx-tag-all-stars', name: 'Togepi & Cleffa & Igglybuff-GX', nameJP: 'トゲピー&ピィ&ププリンGX', nameRoman: 'Togepi & Cleffa & Igglybuff-GX', set: 'Tag All Stars', number: '186/173', hp: '', type: 'Psychic', stage: 'Basic', image: '/cards/tcg_ce7f56517a5e82c3c038373cb1eaf338c45d98b1f080eefd4bb43e452399837b.jpg' },
-  { slug: 'blues-tactics-tag-all-stars', name: "Blue's Tactics", nameJP: 'グリーンの戦略', nameRoman: "Blue's Tactics", set: 'Tag All Stars', number: '193/173', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_4b48781616061d8bca243ec4a9a72c9f6cf6c96755329ec487a85d88e64a3466.jpg' },
-  { slug: 'wicke-darkness-that-consumes-light', name: 'Wicke', nameJP: 'プルメリ', nameRoman: 'Wicke', set: 'Darkness that Consumes Light', number: '057/051', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_cec451b3c196636ccb4e0885649f170fb5f0e66c015740060aa4afb62ba82bf8.jpg' },
-  { slug: 'reshiram-and-zekrom-gx-dream-league', name: 'Reshiram & Zekrom-GX', nameJP: 'レシラム&ゼクロムGX', nameRoman: 'Reshiram & Zekrom-GX', set: 'Dream League', number: '064/049', hp: '', type: 'Fire', stage: 'Basic', image: '/cards/tcg_6f57135ea6633da3a775a0e3df6acb79fdb84aa4357419e51bd8b675f3a5ea5b.jpg' },
-  { slug: 'pikachu-ex-super-electric-breaker', name: 'Pikachu EX', nameJP: 'ピカチュウex', nameRoman: 'Pikachu EX', set: 'Super Electric Breaker', number: '132/106', hp: '', type: 'Lightning', stage: 'Basic', image: '/cards/tcg_2ac22931a4bffa5f949f88fb177c037ab11115a5fa8032fea89b53d024006198.webp' },
-  { slug: 'mega-dragonite-ex-mega-dream-ex-246', name: 'Mega Dragonite EX', nameJP: 'メガカイリューex', nameRoman: 'Mega Dragonite EX', set: 'Mega Dream EX', number: '246/193', hp: '', type: 'Dragon', stage: 'Mega Evolution', image: '/cards/tcg_774128e79ca48d1e435ba3fcdf6c123d336f397e9775ef4f5aeb100fbaf9f3b3.webp' },
-  { slug: 'greninja-ex-crimson-haze', name: 'Greninja EX', nameJP: 'ゲッコウガex', nameRoman: 'Greninja EX', set: 'Crimson Haze', number: '090/066', hp: '', type: 'Water', stage: 'Stage 2', image: '/cards/tcg_9de79d2daf893177064e42145f04aa51fb8fdb0271f6910e139e8cff5e3fcfa1.webp' },
-  { slug: 'cynthia-gx-ultra-shiny', name: 'Cynthia', nameJP: 'シロナ', nameRoman: 'Cynthia', set: 'GX Ultra Shiny', number: '153/150', hp: '', type: 'Trainer', stage: 'Supporter', image: '/cards/tcg_b115eed26ac4961d7d32542a9bf8c8f35cc4270c161f3c34072984062c2f700d.jpg' },
-  { slug: 'charizard-ex-shiny-treasure-ex', name: 'Charizard EX', nameJP: 'リザードンex', nameRoman: 'Charizard EX', set: 'Shiny Treasure EX', number: '349/190', hp: '', type: 'Fire', stage: 'Stage 2', image: '/cards/tcg_cd15aefd8a95acdf61cb81d061ada22d7d4e69bb454730cf895ba206d2b9c45b.webp' },];
+# ── STEP 1: Append 217 new cards to cardData.ts ──────────────────────────────
+sed -i '' '$d' "$CARDFILE"
+cat >> "$CARDFILE" << 'ENDOFCARDS'
   { slug: 'chespin-ninja-spinner-084-083', name: 'Chespin', nameJP: '', nameRoman: '', set: 'Ninja Spinner', number: '084/083', hp: '', type: '', stage: '', image: '/_next/image?url=https%3A%2F%2Fstatic.tcgcollector.com%2Fcontent%2Fimages%2Fa8%2F83%2Fc9%2Fa883c9ce6fd5f768d8478547d778995e2ade96a557637f4e20a91e11e9ec7ee2.webp&w=400&q=75', noLink: true },
   { slug: 'fennekin-ninja-spinner-085-083', name: 'Fennekin', nameJP: '', nameRoman: '', set: 'Ninja Spinner', number: '085/083', hp: '', type: '', stage: '', image: '/_next/image?url=https%3A%2F%2Fstatic.tcgcollector.com%2Fcontent%2Fimages%2Fca%2F3c%2Ff9%2Fca3cf986eb99bde5e733fb8dc98c59179ac0b81e325ae7d32d30ce76a6d72dd2.webp&w=400&q=75', noLink: true },
   { slug: 'froakie-ninja-spinner-086-083', name: 'Froakie', nameJP: '', nameRoman: '', set: 'Ninja Spinner', number: '086/083', hp: '', type: '', stage: '', image: '/_next/image?url=https%3A%2F%2Fstatic.tcgcollector.com%2Fcontent%2Fimages%2F4c%2Fd6%2Fd5%2F4cd6d58b3b06a8f740d9af234c1620697e1e4c5e41c82dc66e6fd4e047f10003.webp&w=400&q=75', noLink: true },
@@ -340,3 +227,51 @@ export const cardData = [
   { slug: 'gothita-white-flare-121-086', name: 'Gothita', nameJP: '', nameRoman: '', set: 'White Flare', number: '121/086', hp: '', type: '', stage: '', image: '/_next/image?url=https%3A%2F%2Fstatic.tcgcollector.com%2Fcontent%2Fimages%2F5f%2Fb4%2Fe9%2F5fb4e9809c74f016631eab8a9c26e32e4add8b8664bb66ebd94a850977d8afe0.webp&w=400&q=75', noLink: true },
   { slug: 'gothorita-white-flare-122-086', name: 'Gothorita', nameJP: '', nameRoman: '', set: 'White Flare', number: '122/086', hp: '', type: '', stage: '', image: '/_next/image?url=https%3A%2F%2Fstatic.tcgcollector.com%2Fcontent%2Fimages%2F88%2F70%2F2e%2F88702e2c9245deb437bfc2af2fc1239ba62d800152660e7e66fba67055b63bf3.webp&w=400&q=75', noLink: true },
 ];
+ENDOFCARDS
+echo "✅ 217 cards added to $CARDFILE"
+
+# ── STEP 2: Patch browse/page.tsx ────────────────────────────────────────────
+node << 'NODESCRIPT'
+const fs = require('fs');
+const PAGEFILE = process.env.PAGEFILE || 'src/app/browse/page.tsx';
+let src = fs.readFileSync(PAGEFILE, 'utf8');
+
+if (src.includes('card.noLink')) {
+  console.log('browse/page.tsx already patched, skipping.');
+  process.exit(0);
+}
+
+// 1. Add missing set colors after the opening brace of SET_COLORS
+src = src.replace(
+  "const SET_COLORS: Record<string, string> = {",
+  `const SET_COLORS: Record<string, string> = {
+  'Ninja Spinner': '#7abfb5',
+  'MEGA Dream ex': '#bf9abf',
+  'Black Bolt': '#7a7abf',
+  'White Flare': '#bfbf9a',`
+);
+
+// 2. Replace the Link wrapper with a noLink-aware conditional
+// The card inner JSX — identical to what's already in the file
+const inner = `<div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: card.noLink ? 'default' : 'pointer' }}>
+                      <div style={{ padding: '6px' }}>
+                        <img src={card.image} alt={card.name} style={{ width: '100%', display: 'block', borderRadius: '8px' }} />
+                      </div>
+                      <div style={{ padding: '10px 12px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#ffffff' }}>{card.name}</div>
+                        <div style={{ fontSize: '11px', color: SET_COLORS[card.set] || '#aaa', marginTop: '4px' }}>{card.set}</div>
+                        <div style={{ fontSize: '10px', color: '#666', marginTop: '6px' }}>{getCardNumber(card.number)}</div>
+                      </div>
+                    </div>`;
+
+const newBlock = `{card.noLink ? (
+                  <div key={card.slug}>${inner}</div>
+                ) : (
+                  <Link key={card.slug} href={'/cards/' + card.slug} style={{ textDecoration: 'none' }}>${inner}</Link>
+                )}`;
+
+src = src.replace(/<Link key=\{card\.slug\}[\s\S]*?<\/Link>/, newBlock);
+
+fs.writeFileSync(PAGEFILE, src);
+console.log('✅ browse/page.tsx patched');
+NODESCRIPT

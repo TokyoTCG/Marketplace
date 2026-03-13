@@ -235,7 +235,12 @@ export default function CardDetail({ card }: { card: any }) {
                       </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 18, fontWeight: 800 }}>€{l.price.toFixed(2)}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 18, fontWeight: 800 }}>€{l.price.toFixed(2)}</span>
+                        {l.photos && l.photos.length > 0 && (
+                          <span onClick={(e) => { e.stopPropagation(); setViewingPhotos(l.photos); }} style={{ cursor: 'pointer', fontSize: 18, color: '#a67abf' }}>📷</span>
+                        )}
+                      </div>
                       <button style={{ background: '#a67abf', border: 'none', borderRadius: 8, color: '#fff', fontSize: 12, fontWeight: 700, padding: '8px 20px', cursor: 'pointer' }}>
                         Kopen →
                       </button>
@@ -268,7 +273,12 @@ export default function CardDetail({ card }: { card: any }) {
                       <span style={{ fontSize: 11, fontWeight: 700, color: '#a67abf', background: '#a67abf18', border: '1px solid #a67abf40', borderRadius: 5, padding: '2px 10px', display: 'inline-block', whiteSpace: 'nowrap', width: 'fit-content' }}>
                         {conditionLabel[l.condition] || l.condition}
                       </span>
-                      <span style={{ fontSize: 15, fontWeight: 800 }}>€{l.price.toFixed(2)}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 15, fontWeight: 800 }}>€{l.price.toFixed(2)}</span>
+                        {l.photos && l.photos.length > 0 && (
+                          <span onClick={(e) => { e.stopPropagation(); setViewingPhotos(l.photos); }} style={{ cursor: 'pointer', fontSize: 16, color: '#a67abf' }} title="Foto's bekijken">📷</span>
+                        )}
+                      </div>
                       <button style={{ background: '#a67abf', border: 'none', borderRadius: 8, color: '#fff', fontSize: 12, fontWeight: 700, padding: '7px 0', cursor: 'pointer', width: '100%' }}>
                         Kopen →
                       </button>

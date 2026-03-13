@@ -106,7 +106,7 @@ export default function SetPage() {
       </div>
       <SiteHeader activePage="kopen" />
 
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '32px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: 'clamp(16px, 4vw, 32px)' }}>
         <a href="/" style={{ color: '#aaaaaa', textDecoration: 'none', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '24px' }}
           onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
           onMouseLeave={e => (e.currentTarget.style.color = '#aaaaaa')}>

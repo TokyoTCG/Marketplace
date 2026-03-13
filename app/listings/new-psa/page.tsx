@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { cardData } from '@/lib/cardData'
 
-const WORKING_CARDS = cardData.map(c => ({ name: c.name, set: c.set, src: c.image }))
+const WORKING_CARDS = cardData.map(c => ({ name: c.name, set: c.set, src: c.image, slug: c.slug }))
 
 export default function NewPsaListing() {
   const router = useRouter()
@@ -23,6 +23,7 @@ export default function NewPsaListing() {
   const [photos, setPhotos] = useState<string[]>([])
   const [photosConfirmed, setPhotosConfirmed] = useState(false)
   const [fromCamera, setFromCamera] = useState(false)
+  const [successSlug, setSuccessSlug] = useState('')
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login?callbackUrl=/listings/new-psa')
@@ -55,7 +56,7 @@ export default function NewPsaListing() {
     if (!photosConfirmed || photos.length < 2) { setSubmitError("Maak minimaal 2 foto's (voor- en achterkant)."); return }
     setSubmitting(true)
     setSubmitError('')
-    const cardSlug = selectedCard.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + selectedCard.set.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    const cardSlug = selectedCard.slug
     const res = await fetch('/api/listings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -63,26 +64,43 @@ export default function NewPsaListing() {
     })
     const data = await res.json()
     if (!res.ok) { setSubmitError(data.error || 'Er is iets misgegaan.'); setSubmitting(false) }
-    else router.push('/graded/' + cardSlug)
+    else { setSuccessSlug('/graded/' + (data.listing?.card_slug || cardSlug)) }
   }
 
   const inputStyle: React.CSSProperties = { width: '100%', backgroundColor: '#2b2b2e', border: '1px solid #3a3a3d', borderRadius: '8px', padding: '12px 16px', color: '#ffffff', fontSize: '14px', outline: 'none', marginTop: '8px', boxSizing: 'border-box' }
   const labelStyle: React.CSSProperties = { display: 'block', fontSize: '11px', fontWeight: '700', color: '#aaaaaa', letterSpacing: '1px' }
 
+  if (successSlug) return (
+    <div style={{ backgroundColor: '#1a1a1c', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
+      <div style={{ background: '#1f1f21', border: '1px solid #2e2e31', borderRadius: '16px', padding: '40px 32px', maxWidth: '400px', width: '90%', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px', color: '#fff' }}>Listing aangemaakt!</h2>
+        <p style={{ color: '#888', fontSize: '13px', marginBottom: '28px', lineHeight: '1.6' }}>Je PSA kaart staat nu live op de marktplaats.</p>
+        <button onClick={() => router.push(successSlug)}
+          style={{ width: '100%', backgroundColor: '#a67abf', color: '#fff', border: 'none', borderRadius: '8px', padding: '14px', fontWeight: '700', fontSize: '14px', cursor: 'pointer', letterSpacing: '1px', marginBottom: '10px' }}>
+          BEKIJK LISTING →
+        </button>
+        <button onClick={() => { setSuccessSlug(''); setSelectedCard(null); setSearchTerm(''); setPhotos([]); setPhotosConfirmed(false); setPrice(''); setPsaGrade(''); }}
+          style={{ width: '100%', backgroundColor: 'transparent', color: '#888', border: '1px solid #2e2e31', borderRadius: '8px', padding: '14px', fontWeight: '600', fontSize: '14px', cursor: 'pointer' }}>
+          Nog een listing aanmaken
+        </button>
+      </div>
+    </div>
+  )
+
   return (
     <div style={{ backgroundColor: '#1a1a1c', minHeight: '100vh', color: '#ffffff', fontFamily: "'Segoe UI', system-ui, sans-serif", position: 'relative' }}>
-      <style>{`@keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } }`}</style>
+      <style>{`@keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } } @media (max-width: 767px) { .listing-form { display: flex; flex-direction: column-reverse; } }`}</style>
       <div id="twinkle-psa" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }} />
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ backgroundColor: '#a67abf', padding: '7px', textAlign: 'center', fontSize: '11px', letterSpacing: '2px', fontWeight: '700' }}>
           DE JAPANSE POKÉMON MARKTPLAATS VAN NEDERLAND
         </div>
         <SiteHeader activePage="verkopen" />
-        <main style={{ maxWidth: '1050px', margin: '0 auto', padding: '40px 32px' }}>
+        <main style={{ maxWidth: '1050px', margin: '0 auto', padding: 'clamp(20px, 4vw, 40px) clamp(16px, 4vw, 32px)' }}>
           <a href="/sell-choose" style={{ color: '#a67abf', textDecoration: 'none', fontSize: '14px', display: 'inline-block', marginBottom: '20px' }}>← Terug</a>
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '10px' }}>PSA kaart verkopen</h1>
           <p style={{ color: '#aaaaaa', marginBottom: '40px' }}>Zoek een kaart op en vul de PSA details in</p>
-          <div style={{ display: 'flex', gap: '40px' }}>
+          <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }} className="listing-form">
             <div style={{ flex: 1 }}>
               <div style={{ marginBottom: '25px', position: 'relative' }}>
                 <label style={labelStyle}>ZOEK KAART *</label>
@@ -145,7 +163,7 @@ export default function NewPsaListing() {
                 {submitting ? 'AANMAKEN...' : photosConfirmed ? 'LISTING AANMAKEN' : "MAAK EERST FOTO'S"}
               </button>
             </div>
-            <div style={{ width: '360px' }}>
+            <div style={{ width: '100%', maxWidth: '360px' }}>
               <label style={labelStyle}>FOTO'S * (VOOR- EN ACHTERKANT VEREIST)</label>
               {!photosConfirmed ? (
                 <CardPhotoCapture onPhotosReady={(front, back, isCamera) => {
