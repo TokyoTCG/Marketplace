@@ -138,8 +138,8 @@ export default function Browse() {
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
                 {bySet[set].map(card => (
-                  {card.noLink ? (
-                  <div key={card.slug}><div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: card.noLink ? 'default' : 'pointer' }}>
+                  card.noLink ? (
+                    <div key={card.slug}><div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: card.noLink ? 'default' : 'pointer' }}>
                       <div style={{ padding: '6px' }}>
                         <img src={card.image} alt={card.name} style={{ width: '100%', display: 'block', borderRadius: '8px' }} />
                       </div>
@@ -149,8 +149,8 @@ export default function Browse() {
                         <div style={{ fontSize: '10px', color: '#666', marginTop: '6px' }}>{getCardNumber(card.number)}</div>
                       </div>
                     </div></div>
-                ) : (
-                  <Link key={card.slug} href={'/cards/' + card.slug} style={{ textDecoration: 'none' }}><div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: card.noLink ? 'default' : 'pointer' }}>
+                  ) : (
+                    <Link key={card.slug} href={'/cards/' + card.slug} style={{ textDecoration: 'none' }}><div style={{ borderRadius: '12px', backgroundColor: '#1f1f21', border: '1px solid #2e2e31', overflow: 'hidden', cursor: card.noLink ? 'default' : 'pointer' }}>
                       <div style={{ padding: '6px' }}>
                         <img src={card.image} alt={card.name} style={{ width: '100%', display: 'block', borderRadius: '8px' }} />
                       </div>
@@ -160,7 +160,7 @@ export default function Browse() {
                         <div style={{ fontSize: '10px', color: '#666', marginTop: '6px' }}>{getCardNumber(card.number)}</div>
                       </div>
                     </div></Link>
-                )}
+                  )
                 ))}
               </div>
             </div>
