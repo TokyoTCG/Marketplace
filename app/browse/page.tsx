@@ -10,10 +10,6 @@ function getCardNumber(number: string): string {
 }
 
 const SET_COLORS: Record<string, string> = {
-  'Ninja Spinner': '#7abfb5',
-  'MEGA Dream ex': '#bf9abf',
-  'Black Bolt': '#7a7abf',
-  'White Flare': '#bfbf9a',
   'Nullifying Zero': '#a67abf',
   'Mega Dream EX': '#bf7a7a',
   'Inferno X': '#bf9e7a',
